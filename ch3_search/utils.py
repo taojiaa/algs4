@@ -8,7 +8,7 @@ def FrequencyCounter(file_name, st, min_len=8):
                     st.put(word, st.get(word) + 1)
                 else:
                     st.put(word, 1)
-    max_word = ''
+    max_word = ' '
     st.put(max_word, 0)
     for key in st.keys():
         if st.get(key) > st.get(max_word):

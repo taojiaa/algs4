@@ -1,0 +1,6 @@
+{
+  "python.pythonPath": "/home/taoj/.local/share/virtualenvs/algs4-7lfK_q2k/bin/python",
+  "python.linting.flake8Enabled": true,
+  "python.linting.pylintEnabled": false,
+  "python.linting.enabled": true
+}
