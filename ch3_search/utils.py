@@ -14,3 +14,11 @@ def FrequencyCounter(file_name, st, min_len=8):
         if st.get(key) > st.get(max_word):
             max_word = key
     print(f'The frequency of {max_word} is {st.get(max_word)}')
+
+
+def check_key(func):
+    def wrapper(*args, **kwargs):
+        if args[1] is None:
+            raise ValueError('The key cannot be None.')
+        return func(*args, **kwargs)
+    return wrapper

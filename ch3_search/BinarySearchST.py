@@ -42,4 +42,4 @@ class BinarySearchST(SortedSymbolTable):
 
 if __name__ == '__main__':
     st = BinarySearchST()
-    FrequencyCounter('random_words.txt', st)
+    FrequencyCounter('./test_data/random_words.txt', st)

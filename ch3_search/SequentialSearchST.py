@@ -1,4 +1,4 @@
-from utils import FrequencyCounter
+from utils import FrequencyCounter, check_key
 from Base import UnsortedSymbolTable
 
 
@@ -7,14 +7,6 @@ class Node:
         self.key = key
         self.val = val
         self.next = node
-
-
-def raise_key(func):
-    def wrapper(*args, **kwargs):
-        if args[1] is None:
-            raise ValueError('The key cannot be None.')
-        return func(*args, **kwargs)
-    return wrapper
 
 
 class SequentialSearchST(UnsortedSymbolTable):
@@ -28,13 +20,13 @@ class SequentialSearchST(UnsortedSymbolTable):
     def is_empty(self):
         return self._size == 0
 
-    @raise_key
+    @check_key
     def contains(self, key):
         if self.get(key):
             return True
         return False
 
-    @raise_key
+    @check_key
     def get(self, key):
         node = self._node
         while node:
@@ -43,7 +35,7 @@ class SequentialSearchST(UnsortedSymbolTable):
             node = node.next
         return None
 
-    @raise_key
+    @check_key
     def put(self, key, val):
         if val is None:
             self.delete(key)
@@ -57,7 +49,7 @@ class SequentialSearchST(UnsortedSymbolTable):
         self._node = Node(key, val, self._node)
         self._size = self._size + 1
 
-    @raise_key
+    @check_key
     def delete(self, key):
         def delete_helper(key, node):
             if node is None:
@@ -80,4 +72,4 @@ class SequentialSearchST(UnsortedSymbolTable):
 
 if __name__ == '__main__':
     st = SequentialSearchST()
-    FrequencyCounter('random_words.txt', st)
+    FrequencyCounter('./test_data/random_words.txt', st)
