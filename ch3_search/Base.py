@@ -88,6 +88,9 @@ class SortedSymbolTable(SymbolTable):
 
     @abstractmethod
     def rank(self, key):
+        '''
+        number of keys less than key
+        '''
         pass
 
     @abstractmethod
@@ -105,7 +108,7 @@ class SortedSymbolTable(SymbolTable):
         pass
 
     @abstractmethod
-    def select(self, key):
+    def select(self, k):
         '''
         key of rank k
         '''
