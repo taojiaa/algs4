@@ -1,4 +1,5 @@
 from utils import FrequencyCounter
+from Base import UnsortedSymbolTable
 
 
 class Node:
@@ -16,7 +17,7 @@ def raise_key(func):
     return wrapper
 
 
-class SequentialSearchST:
+class SequentialSearchST(UnsortedSymbolTable):
     def __init__(self):
         self._node = None
         self._size = 0
