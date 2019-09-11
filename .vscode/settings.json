@@ -1,6 +1,0 @@
-{
-  "python.pythonPath": "/home/taojia/.venvs/algs4-K1e4poCH/bin/python",
-  "python.linting.flake8Enabled": true,
-  "python.linting.pylintEnabled": false,
-  "python.linting.enabled": true
-}
