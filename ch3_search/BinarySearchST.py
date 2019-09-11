@@ -20,6 +20,7 @@ class BinarySearchST(SortedSymbolTable):
         return False
 
     def rank(self, key):
+        # Note that rank might return self._size, raising an error when calling self._keys(rank(key)).
         def rank_helper(key, lo, hi):
             # lo, hi is the number index.
             if lo > hi:
@@ -27,9 +28,9 @@ class BinarySearchST(SortedSymbolTable):
             mid = lo + (hi - lo) // 2
             cmpt = compare(key, self._keys[mid])
             if cmpt > 0:
-                return rank_helper(key, mid+1, hi)
+                return rank_helper(key, mid + 1, hi)
             elif cmpt < 0:
-                return rank_helper(key, lo, mid-1)
+                return rank_helper(key, lo, mid - 1)
             else:
                 return mid
         return rank_helper(key, 0, self._size - 1)
@@ -38,28 +39,72 @@ class BinarySearchST(SortedSymbolTable):
         return self._keys[0]
 
     def max(self):
-        return self._keys[-1]
+        return self._keys[self._size - 1]
 
     def select(self, k):
         return self._keys[k]
 
+    def get(self, key):
+        i = self.rank(key)
+        if (i < self._size) and (compare(key, self._keys[i]) == 0):
+            return self._vals[i]
+        return None
+
+    def put(self, key, val):
+        if val is None:
+            self.delete(key)
+        i = self.rank(key)
+        if (i < self._size) and (compare(key, self._keys[i]) == 0):
+            self._vals[i] = val
+            return
+        if self._size == len(self._keys):
+            self._resize(len(self._keys) * 2)
+        for j in range(self._size, i, -1):
+            self._keys[j] = self._keys[j - 1]
+            self._vals[j] = self._vals[j - 1]
+        self._keys[i] = key
+        self._vals[i] = val
+        self._size = self._size + 1
+
     def delete(self, key):
-        pass
+        if self.is_empty():
+            return
+        i = self.rank(key)
+        if (i == self._size) or (compare(key, self._keys[i]) != 0):
+            return
+        for j in range(i, self._size, -1):
+            self._keys[j] = self._keys[j + 1]
+            self._vals[j] = self._vals[j + 1]
+        self._size = self._size - 1
+        if self._size == (len(self._keys) // 4):
+            self._resize(len(self._keys) // 2)
 
-    def delete_min(self, key):
-        pass
+    def delete_min(self):
+        self.delete(self.min())
 
-    def delete_max(self, key):
-        pass
+    def delete_max(self):
+        self.delete(self.max())
 
     def floor(self, key):
-        pass
+        i = self.rank(key)
+        if i == 0:
+            return None
+        if (i < self._size) and (compare(key, self._keys[i]) == 0):
+            return self._keys[i]
+        else:
+            # the both conditions above can be reduced to one condition: 
+            # is the key larger than self._keys[rank(key)]
+            return self._keys[i - 1]
 
     def ceiling(self, key):
-        pass
+        i = self.rank(key)
+        if i == self._size:
+            return None
+        else:
+            return self._keys[i]
 
     def keys(self):
-        return self._keys
+        return self._keys[:self._size]
 
     def range_size(self, lo, hi):
         if lo > hi:
@@ -70,9 +115,23 @@ class BinarySearchST(SortedSymbolTable):
             return self.rank(hi) - self.rank(lo)
 
     def range_keys(self, lo, hi):
-        pass
+        k_lo, k_hi = self.rank(lo), self.rank(hi)
+        if compare(self._keys[k_hi], hi) == 0:
+            return self._keys[k_lo:k_hi + 1]
+        else:
+            return self._keys[k_lo:k_hi]
+
+    def _resize(self, capacity):
+        assert capacity >= self._size
+        temp_keys = [None] * capacity
+        temp_vals = [None] * capacity
+        for i in range(self._size):
+            temp_keys[i] = self._keys[i]
+            temp_vals[i] = self._vals[i]
+        self._keys = temp_keys
+        self._vals = temp_vals
 
 
 if __name__ == '__main__':
-    st = BinarySearchST()
-    FrequencyCounter('./test_data/random_words.txt', st)
+    st = BinarySearchST(20)
+    FrequencyCounter('./test_data/a_tale_of_two_cities.txt', st)

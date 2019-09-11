@@ -73,14 +73,14 @@ class SortedSymbolTable(SymbolTable):
         pass
 
     @abstractmethod
-    def delete_min(self, key):
+    def delete_min(self):
         '''
         delete smallest key
         '''
         pass
 
     @abstractmethod
-    def delete_max(self, key):
+    def delete_max(self):
         '''
         delete largest key
         '''
