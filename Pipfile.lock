@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "de189ba46739289dccad0233911071f032b22122157d722e4ae97ed4bab8eab0"
+            "sha256": "2a150b30153e77424c3a24ab697b444ed939723f6aa99a44e8f8fc79c3f0849f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -333,8 +333,7 @@
         },
         "pyrsistent": {
             "hashes": [
-                "sha256:34b47fa169d6006b32e99d4b3c4031f155e6e68ebcc107d6454852e8e0ee6533",
-                "sha256:b01256a9516064f5ea8e4221599346c9c381a8221a89998e8a722e2443f39175"
+                "sha256:34b47fa169d6006b32e99d4b3c4031f155e6e68ebcc107d6454852e8e0ee6533"
             ],
             "version": "==0.15.4"
         },
@@ -476,6 +475,14 @@
                 "sha256:565a021fd19419476b9362b05eeaa094178de64f8361e44468f9e9d7843901e1"
             ],
             "version": "==1.11.2"
+        },
+        "yapf": {
+            "hashes": [
+                "sha256:02ace10a00fa2e36c7ebd1df2ead91dbfbd7989686dc4ccbdc549e95d19f5780",
+                "sha256:6f94b6a176a7c114cfa6bad86d40f259bbe0f10cf2fa7f2f4b3596fc5802a41b"
+            ],
+            "index": "pypi",
+            "version": "==0.28.0"
         }
     }
 }
