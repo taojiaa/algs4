@@ -1,5 +1,5 @@
-from utils import FrequencyCounter, compare
-from Base import SortedSymbolTable
+from .utils import compare
+from .Base import SortedSymbolTable
 
 
 class BinarySearchST(SortedSymbolTable):
@@ -130,8 +130,3 @@ class BinarySearchST(SortedSymbolTable):
             temp_vals[i] = self._vals[i]
         self._keys = temp_keys
         self._vals = temp_vals
-
-
-if __name__ == '__main__':
-    st = BinarySearchST(20)
-    FrequencyCounter('./test_data/a_tale_of_two_cities.txt', st)

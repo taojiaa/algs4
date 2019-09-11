@@ -1,5 +1,5 @@
-from utils import FrequencyCounter, check_key
-from Base import UnsortedSymbolTable
+from .utils import check_key
+from .Base import UnsortedSymbolTable
 
 
 class Node:
@@ -68,8 +68,3 @@ class SequentialSearchST(UnsortedSymbolTable):
                 _keys.append(node.key)
             node = node.next
         return _keys
-
-
-if __name__ == '__main__':
-    st = SequentialSearchST()
-    FrequencyCounter('./test_data/random_words.txt', st)
