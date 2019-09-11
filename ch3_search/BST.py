@@ -1,5 +1,5 @@
-from .utils import compare
-from .Base import SortedSymbolTable
+from utils import compare
+from Base import SortedSymbolTable
 
 
 class Node:
@@ -18,7 +18,7 @@ class Node:
         else:
             return 0
 
-    @size.setattr
+    @size.setter
     def size(self, size):
         self._size = size
 
@@ -31,6 +31,12 @@ class BST(SortedSymbolTable):
         if self.root is None:
             return 0
         return self.root.size
+
+    # Todo
+    def _size(self, node):
+        if node is None:
+            return 0
+        return node.size
 
     def is_empty(self):
         return self.root.size == 0
@@ -65,7 +71,7 @@ class BST(SortedSymbolTable):
                 node.left = put_helper(key, val, node.left)
             else:
                 node.val = val
-            node.size = node.left.size + node.right.size + 1
+            node.size = self._size(node.left) + self._size(node.right) + 1
             return node
 
         if val is None:
@@ -103,7 +109,7 @@ class BST(SortedSymbolTable):
                 return node.right
             else:
                 node.left = delete_min_helper(node.left)
-                node.size = node.left.size + node.right.size + 1
+                node.size = self._size(node.left) + self._size(node.right) + 1
         self.root = delete_min_helper(self.root)
 
     def delete_max(self):
@@ -112,7 +118,7 @@ class BST(SortedSymbolTable):
                 return node.left
             else:
                 node.right = delete_max_helper(node.right)
-                node.size = node.left.size + node.right.size + 1
+                node.size = self._size(node.left) + self._size(node.right) + 1
         self.root = delete_max_helper(self.root)
 
     def delete(self, key):
@@ -127,7 +133,7 @@ class BST(SortedSymbolTable):
                 return node.right
             else:
                 node.left = delete_min_helper(node.left)
-                node.size = node.left.size + node.right.size + 1
+                node.size = self._size(node.left) + self._size(node.right) + 1
 
         def delete_helper(node, key):
             if node is None:
@@ -154,7 +160,7 @@ class BST(SortedSymbolTable):
                     temp.left = node.left
                     temp.right = delete_min_helper(node.right)
                     node = temp
-            node.size = node.left.size + node.right.size + 1
+            node.size = self._size(node.left) + self._size(node.right) + 1
             return node
         self.root = delete_helper(self.root, key)
 
@@ -166,12 +172,30 @@ class BST(SortedSymbolTable):
             if cmpt > 0:
                 # if the key in the right subtree, 
                 # we need to add all the left subtree and the current node.
-                return node.left.size + rank_helper(key, node.right) + 1
+                return self._size(node.left) + rank_helper(key, node.right) + 1
             elif cmpt < 0:
                 return rank_helper(key, node.left)
             else:
-                return node.left.size
+                return self._size(node.left)
         return rank_helper(key, self.root)
+
+    def select(self, k):
+        # Note that size is not the same as rank.
+        def select_helper(node, k):
+            if node is None:
+                return
+            temp = self._size(node.left)
+            if temp > k:
+                return select_helper(node.left, k)
+            elif temp < k:
+                return select_helper(node.right, k - temp - 1)
+            else:
+                return node
+
+        if (k < 0) or (k > self.root.size):
+            return None
+        node = select_helper(self.root, k)
+        return node.key
 
     def floor(self, key):
         def floor_helper(key, node):
@@ -257,3 +281,9 @@ class BST(SortedSymbolTable):
                 num_right = range_size_helper(node.right, lo, hi)
             return num_left + num_mid + num_right
         return range_size_helper(self.root, lo, hi)
+
+    # def __getitem__(self, key):
+    #     return self.get(key)
+
+    # def __setitem(self, key, val):
+    #     return self.put(key, val)
