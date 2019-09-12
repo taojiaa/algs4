@@ -8,6 +8,7 @@ flake8 = "*"
 pylint = "*"
 jupyter = "*"
 yapf = "*"
+pytest = "*"
 
 [packages]
 

@@ -45,21 +45,20 @@ class BST(SortedSymbolTable):
             return False
 
     def get(self, key):
-        return self._get(self.root, key)
+        return self._get(key, self.root)
 
-    def _get(self, node, key):
+    def _get(self, key, node):
         if node is None:
             return
         cmpt = compare(key, node.key)
         if cmpt > 0:
             return self._get(key, node.right)
-        if cmpt < 0:
+        elif cmpt < 0:
             return self._get(key, node.left)
-        if cmpt == 0:
+        else:
             return node.val
 
     def put(self, key, val):
-
         if val is None:
             self.delete(key)
             return
@@ -120,7 +119,7 @@ class BST(SortedSymbolTable):
         if node.right is None:
             return node.left
         else:
-            node.left = self._delete_max(node.right)
+            node.right = self._delete_max(node.right)
             node.size = self._size(node.left) + self._size(node.right) + 1
             return node
 
