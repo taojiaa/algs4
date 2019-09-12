@@ -124,9 +124,9 @@ class BST(SortedSymbolTable):
             return node
 
     def delete(self, key):
-        self.root = self._delete(self.root, key)
+        self.root = self._delete(key, self.root)
 
-    def _delete(self, node, key):
+    def _delete(self, key, node):
         if node is None:
             return None
         cmpt = compare(key, node.key)
@@ -139,25 +139,24 @@ class BST(SortedSymbolTable):
             if node.left is None:
                 return node.right
             # the node that matches the key has no right subtree.
-            elif node.right is None:
+            if node.right is None:
                 return node.left
             # the node that matches the key has both subtrees.
-            else:
-                # find min(temp) of the right subtree of the current node x
-                # make temp as the new node that replaces x.
-                # concate the left subtree of x to temp.left.
-                # concate the right subtree(except temp) of x to temp.right
-                temp = self._min(node.right)
-                temp.left = node.left
-                temp.right = self._delete_min(node.right)
-                node = temp
+            # find min(temp) of the right subtree of the current node x
+            # make temp as the new node that replaces x.
+            # concate the left subtree of x to temp.left.
+            # concate the right subtree(except temp) of x to temp.right
+            temp = self._min(node.right)
+            temp.right = self._delete_min(node.right)
+            temp.left = node.left
+            node = temp
         node.size = self._size(node.left) + self._size(node.right) + 1
         return node
 
     def rank(self, key):
         return self._rank(key, self.root)
 
-    def _rank(self, key, node): 
+    def _rank(self, key, node):
         if node is None:
             return 0
         cmpt = compare(key, node.key)
@@ -246,21 +245,21 @@ class BST(SortedSymbolTable):
         return self._keys(node.left) + [node.key] + self._keys(node.right)
 
     def range_keys(self, lo, hi):
-        _keys = []
-        self._range_keys(self.root, lo, hi, _keys)
-        return _keys
-    
-    def _range_keys(self, node, lo, hi, _keys):
+        self.__keys = []
+        self._range_keys(self.root, lo, hi)
+        return self.__keys
+
+    def _range_keys(self, node, lo, hi):
         if node is None:
             return
-        cmpthi = compare(lo, node.key)
-        cmptlo = compare(hi, node.key)
+        cmptlo = compare(lo, node.key)
+        cmpthi = compare(hi, node.key)
         if cmptlo < 0:
-            self._range_keys(node.left, lo, hi, _keys)
+            self._range_keys(node.left, lo, hi)
         if cmptlo <= 0 and cmpthi >= 0:
-            _keys.append(node.key)
+            self.__keys.append(node.key)
         if cmpthi > 0:
-            self._range_keys(node.right, lo, hi, _keys)
+            self._range_keys(node.right, lo, hi)
 
     def range_size(self, lo, hi):
         return self._range_size(self.root, lo, hi)
@@ -268,18 +267,15 @@ class BST(SortedSymbolTable):
     def _range_size(self, node, lo, hi):
         if node is None:
             return 0
-        cmpthi = compare(lo, node.key)
-        cmptlo = compare(hi, node.key)
-        if cmptlo < 0:
-            num_left = self._range_size(node.left, lo, hi)
-        if cmptlo <= 0 and cmpthi >= 0:
-            num_mid = 1
-        if cmpthi > 0:
-            num_right = self._range_size(node.right, lo, hi)
+        cmptlo = compare(lo, node.key)
+        cmpthi = compare(hi, node.key)
+        num_left = self._range_size(node.left, lo, hi) if cmptlo < 0 else 0
+        num_mid = 1 if cmptlo <= 0 and cmpthi >= 0 else 0
+        num_right = self._range_size(node.right, lo, hi) if cmpthi > 0 else 0
         return num_left + num_mid + num_right
 
-    # def __getitem__(self, key):
-    #     return self.get(key)
+    def __getitem__(self, key):
+        return self.get(key)
 
-    # def __setitem(self, key, val):
-    #     return self.put(key, val)
+    def __setitem__(self, key, val):
+        return self.put(key, val)
