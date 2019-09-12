@@ -36,7 +36,7 @@ class BST(SortedSymbolTable):
         return node.size
 
     def is_empty(self):
-        return self.root.size == 0
+        return self._size(self.root) == 0
 
     def contains(self, key):
         if self.get(key) is not None:
