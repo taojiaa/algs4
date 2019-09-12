@@ -3,7 +3,7 @@ from .Base import SortedSymbolTable
 
 
 class BinarySearchST(SortedSymbolTable):
-    def __init__(self, capacity):
+    def __init__(self, capacity=20):
         self._keys = [None] * capacity
         self._vals = [None] * capacity
         self._size = 0
@@ -21,19 +21,21 @@ class BinarySearchST(SortedSymbolTable):
 
     def rank(self, key):
         # Note that rank might return self._size, raising an error when calling self._keys(rank(key)).
-        def rank_helper(key, lo, hi):
-            # lo, hi is the number index.
-            if lo > hi:
-                return lo
-            mid = lo + (hi - lo) // 2
-            cmpt = compare(key, self._keys[mid])
-            if cmpt > 0:
-                return rank_helper(key, mid + 1, hi)
-            elif cmpt < 0:
-                return rank_helper(key, lo, mid - 1)
-            else:
-                return mid
-        return rank_helper(key, 0, self._size - 1)
+
+        return self._rank(key, 0, self._size - 1)
+
+    def _rank(self, key, lo, hi):
+        # lo, hi is the number index.
+        if lo > hi:
+            return lo
+        mid = lo + (hi - lo) // 2
+        cmpt = compare(key, self._keys[mid])
+        if cmpt > 0:
+            return self._rank(key, mid + 1, hi)
+        elif cmpt < 0:
+            return self._rank(key, lo, mid - 1)
+        else:
+            return mid
 
     def min(self):
         return self._keys[0]
@@ -72,7 +74,7 @@ class BinarySearchST(SortedSymbolTable):
         i = self.rank(key)
         if (i == self._size) or (compare(key, self._keys[i]) != 0):
             return
-        for j in range(i, self._size, -1):
+        for j in range(i, self._size):
             self._keys[j] = self._keys[j + 1]
             self._vals[j] = self._vals[j + 1]
         self._size = self._size - 1
@@ -130,3 +132,9 @@ class BinarySearchST(SortedSymbolTable):
             temp_vals[i] = self._vals[i]
         self._keys = temp_keys
         self._vals = temp_vals
+
+    def __getitem__(self, key):
+        return self.get(key)
+
+    def __setitem__(self, key, val):
+        return self.put(key, val)

@@ -1,9 +1,9 @@
 import string
 from random import shuffle
 
-from search.BST import BST
+from search.BinarySearchST import BinarySearchST
 
-test_class = BST
+test_class = BinarySearchST
 
 
 def file_reader(file_name='./test/test.txt'):

@@ -1,4 +1,3 @@
-from .utils import check_key
 from .Base import UnsortedSymbolTable
 
 
@@ -20,13 +19,11 @@ class SequentialSearchST(UnsortedSymbolTable):
     def is_empty(self):
         return self._size == 0
 
-    @check_key
     def contains(self, key):
         if self.get(key):
             return True
         return False
 
-    @check_key
     def get(self, key):
         node = self._node
         while node:
@@ -35,7 +32,6 @@ class SequentialSearchST(UnsortedSymbolTable):
             node = node.next
         return None
 
-    @check_key
     def put(self, key, val):
         if val is None:
             self.delete(key)
@@ -49,7 +45,6 @@ class SequentialSearchST(UnsortedSymbolTable):
         self._node = Node(key, val, self._node)
         self._size = self._size + 1
 
-    @check_key
     def delete(self, key):
         def delete_helper(key, node):
             if node is None:
