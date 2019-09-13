@@ -53,7 +53,8 @@ class SequentialSearchST(UnsortedSymbolTable):
                 self._size = self._size - 1
                 return node.next
             node.next = delete_helper(key, node.next)
-        delete_helper(key, self._node)
+            return node
+        self._node = delete_helper(key, self._node)
 
     def keys(self):
         _keys = []

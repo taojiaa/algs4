@@ -91,3 +91,31 @@ class SortedSymbolTableTest:
         st = initiate(test_class)
         st['a'] = 26
         assert st.get('a') == 26
+
+
+class UnSortedSymbolTableTest:
+
+    def test_contains(self, test_class):
+        st = initiate(test_class)
+        assert st.contains('z')
+
+    def test_size(self, test_class):
+        st = initiate(test_class)
+        assert st.size() == 26
+
+    def test_keys(self, test_class):
+        st = initiate(test_class)
+        assert set(st.keys()) == set(list(string.ascii_lowercase))
+
+    def test_get(self, test_class):
+        st = initiate(test_class)
+        assert st.get('a') == 1
+        assert st.get('z') == 26
+
+    def test_delete(self, test_class):
+        st = initiate(test_class)
+        st.delete('m')
+        st.delete('z')
+        assert st.get('m') is None
+        assert st.get('z') is None
+        assert st.size() == 24
