@@ -52,29 +52,29 @@ class Test:
         st = initiate(test_class)
         assert st.size() == 26
 
-    # def test_keys(self):
-    #     st = initiate(test_class)
-    #     assert st.keys() == list(string.ascii_lowercase)
+    def test_keys(self):
+        st = initiate(test_class)
+        assert st.keys() == list(string.ascii_lowercase)
 
     def test_get(self):
         st = initiate(test_class)
         assert st.get('a') == 1
         assert st.get('z') == 26
 
-    # def test_rank(self):
-    #     st = initiate(test_class)
-    #     assert st.rank('a') == 0
-    #     assert st.rank('aa') == 1
-    #     assert st.rank('z') == 25
-    #     assert st.rank('zz') == 26
+    def test_rank(self):
+        st = initiate(test_class)
+        assert st.rank('a') == 0
+        assert st.rank('aa') == 1
+        assert st.rank('z') == 25
+        assert st.rank('zz') == 26
 
-    # def test_min(self):
-    #     st = initiate(test_class)
-    #     assert st.min() == 'a'
+    def test_min(self):
+        st = initiate(test_class)
+        assert st.min() == 'a'
 
-    # def test_max(self):
-    #     st = initiate(test_class)
-    #     assert st.max() == 'z'
+    def test_max(self):
+        st = initiate(test_class)
+        assert st.max() == 'z'
 
     # def test_delete_min(self):
     #     st = initiate(test_class)
@@ -96,31 +96,31 @@ class Test:
     #     assert st.get('z') is None
     #     assert st.size() == 24
 
-    # def test_floor(self):
-    #     st = initiate(test_class)
-    #     assert st.floor('m') == 'm'
-    #     assert st.floor('mm') == 'm'
+    def test_floor(self):
+        st = initiate(test_class)
+        assert st.floor('m') == 'm'
+        assert st.floor('mm') == 'm'
 
-    # def test_ceiling(self):
-    #     st = initiate(test_class)
-    #     assert st.ceiling('m') == 'm'
-    #     assert st.ceiling('mm') == 'n'
+    def test_ceiling(self):
+        st = initiate(test_class)
+        assert st.ceiling('m') == 'm'
+        assert st.ceiling('mm') == 'n'
 
-    # def test_range_keys(self):
-    #     st = initiate(test_class)
-    #     assert st.range_keys('a', 'z') == list(string.ascii_lowercase)
-    #     assert st.range_keys('aa', 'ya') == list(string.ascii_lowercase)[1:-1]
+    def test_range_keys(self):
+        st = initiate(test_class)
+        assert st.range_keys('a', 'z') == list(string.ascii_lowercase)
+        assert st.range_keys('aa', 'ya') == list(string.ascii_lowercase)[1:-1]
 
-    # def test_range_size(self):
-    #     st = initiate(test_class)
-    #     assert st.range_size('a', 'z') == 26
-    #     assert st.range_size('aa', 'ya') == 24
+    def test_range_size(self):
+        st = initiate(test_class)
+        assert st.range_size('a', 'z') == 26
+        assert st.range_size('aa', 'ya') == 24
 
-    # def test_getitem(self):
-    #     st = initiate(test_class)
-    #     assert st.get('a') == st['a']
+    def test_getitem(self):
+        st = initiate(test_class)
+        assert st.get('a') == st['a']
 
-    # def test_setitem(self):
-    #     st = initiate(test_class)
-    #     st['a'] = 26
-    #     assert st.get('a') == 26
+    def test_setitem(self):
+        st = initiate(test_class)
+        st['a'] = 26
+        assert st.get('a') == 26

@@ -1,6 +1,5 @@
-
 from .utils import compare
-from .Base import SortedSymbolTable
+from .BST import BST
 
 RED = 1
 BLACK = 0
@@ -13,22 +12,11 @@ class Node:
         self.val = val
         self.left = None
         self.right = None
-        self._size = 1
+        self.size = 1
         self.color = color
 
-    @property
-    def size(self):
-        if self is not None:
-            return self._size
-        else:
-            return 0
 
-    @size.setter
-    def size(self, size):
-        self._size = size
-
-
-class RedBlackBST(SortedSymbolTable):
+class RedBlackBST(BST):
 
     def __init__(self):
         self.root = None
@@ -48,7 +36,7 @@ class RedBlackBST(SortedSymbolTable):
         temp.size = node.size
         node.size = self._size(node.left) + self._size(node.right) + 1
         return temp
-        
+
     def _rotate_right(self, node):
         # the new node is temp, so we need to return.
         temp = node.left
@@ -65,17 +53,6 @@ class RedBlackBST(SortedSymbolTable):
         node.left.color = BLACK
         node.right.color = BLACK
         node.color = RED
-
-    def size(self):
-        return self._size(self.root)
-
-    def _size(self, node):
-        if node is None:
-            return 0
-        return node.size
-
-    def is_empty(self):
-        return self._size(self.root) == 0
 
     def put(self, key, val):
         if val is None:
@@ -103,32 +80,15 @@ class RedBlackBST(SortedSymbolTable):
         node.size = self._size(node.left) + self._size(node.right) + 1
         return node
 
-    def contains(self, key):
-        if self.get(key):
-            return True
-        return False
+    def keys(self):
+        return self._keys(self.root)
 
-    def get(self, key):
-        return self._get(key, self.root)
-
-    def _get(self, key, node):
+    def _keys(self, node):
         if node is None:
-            return None
-        cmpt = compare(key, node.key)
-        if cmpt < 0:
-            return self._get(key, node.left)
-        elif cmpt > 0:
-            return self._get(key, node.right)
-        else:
-            return node.val
+            return []
+        return self._keys(node.left) + [node.key] + self._keys(node.right)
 
     def delete(self, key):
-        pass
-
-    def min(self):
-        pass
-
-    def max(self):
         pass
 
     def delete_min(self):
@@ -137,23 +97,3 @@ class RedBlackBST(SortedSymbolTable):
     def delete_max(self):
         pass
 
-    def floor(self, key):
-        pass
-
-    def ceiling(self, key):
-        pass
-
-    def rank(self, key):
-        pass
-
-    def select(self, k):
-        pass
-
-    def keys(self):
-        pass
-
-    def range_size(self, lo, hi):
-        pass
-
-    def range_keys(self, lo, hi):
-        pass

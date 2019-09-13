@@ -21,7 +21,6 @@ class BinarySearchST(SortedSymbolTable):
 
     def rank(self, key):
         # Note that rank might return self._size, raising an error when calling self._keys(rank(key)).
-
         return self._rank(key, 0, self._size - 1)
 
     def _rank(self, key, lo, hi):

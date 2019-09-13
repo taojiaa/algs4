@@ -9,18 +9,7 @@ class Node:
         self.val = val
         self.left = None
         self.right = None
-        self._size = 1
-
-    @property
-    def size(self):
-        if self is not None:
-            return self._size
-        else:
-            return 0
-
-    @size.setter
-    def size(self, size):
-        self._size = size
+        self.size = 1
 
 
 class BST(SortedSymbolTable):
@@ -78,28 +67,24 @@ class BST(SortedSymbolTable):
         return node
 
     def min(self):
-        if self.root is None:
-            return None
-        else:
-            return self._min(self.root).key
+        if self.is_empty():
+            return
+        return self._min(self.root).key
 
     def _min(self, node):
         if node.left is None:
             return node
-        else:
-            return self._min(node.left)
+        return self._min(node.left)
 
     def max(self):
-        if self.root is None:
-            return None
-        else:
-            return self._max(self.root).key
+        if self.is_empty():
+            return
+        return self._max(self.root).key
 
     def _max(self, node):
         if node.right is None:
             return node
-        else:
-            return self._max(node.right)
+        return self._max(node.right)
 
     def delete_min(self):
         self.root = self._delete_min(self.root)
