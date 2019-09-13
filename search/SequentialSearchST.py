@@ -2,7 +2,7 @@ from .Base import UnsortedSymbolTable
 
 
 class Node:
-    def __init__(self, key=None, val=None, node=None):
+    def __init__(self, key, val, node):
         self.key = key
         self.val = val
         self.next = node
