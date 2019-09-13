@@ -29,6 +29,12 @@ class SortedSymbolTableTest:
         assert st.rank('z') == 25
         assert st.rank('zz') == 26
 
+    def test_select(self, test_class):
+        st = initiate(test_class)
+        assert st.select(0) == 'a'
+        assert st.select(3) == 'd'
+        assert st.select(25) == 'z'
+
     def test_min(self, test_class):
         st = initiate(test_class)
         assert st.min() == 'a'

@@ -71,6 +71,9 @@ class RedBlackBST(BST):
             node.right = self._put(key, val, node.right)
         else:
             node.val = val
+        return self._balance(node)
+
+    def _balance(self, node):
         if self._is_red(node.right) and not self._is_red(node.left):
             node = self._rotate_left(node)
         if self._is_red(node.left) and self._is_red(node.left.left):
@@ -79,14 +82,6 @@ class RedBlackBST(BST):
             self._flip_colors(node)
         node.size = self._size(node.left) + self._size(node.right) + 1
         return node
-
-    def keys(self):
-        return self._keys(self.root)
-
-    def _keys(self, node):
-        if node is None:
-            return []
-        return self._keys(node.left) + [node.key] + self._keys(node.right)
 
     def delete(self, key):
         pass
