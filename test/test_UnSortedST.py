@@ -1,6 +1,6 @@
 import pytest
 
-from search.SequentialSearchST import SequentialSearchST
+from src.search.SequentialSearchST import SequentialSearchST
 
 from .Base import UnSortedSymbolTableTest
 

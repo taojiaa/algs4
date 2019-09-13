@@ -1,8 +1,8 @@
 import pytest
 
-from search.BST import BST
-from search.BinarySearchST import BinarySearchST
-from search.RedBlackBST import RedBlackBST
+from src.search.BST import BST
+from src.search.BinarySearchST import BinarySearchST
+from src.search.RedBlackBST import RedBlackBST
 
 from .Base import SortedSymbolTableTest
 
