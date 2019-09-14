@@ -4,7 +4,7 @@ from src.search.BST import BST
 from src.search.BinarySearchST import BinarySearchST
 from src.search.RedBlackBST import RedBlackBST
 
-from .Base import SortedSymbolTableTest
+from .base_search import SortedSymbolTableTest
 
 
 @pytest.fixture

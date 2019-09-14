@@ -2,7 +2,7 @@ import pytest
 
 from src.search.SequentialSearchST import SequentialSearchST
 
-from .Base import UnSortedSymbolTableTest
+from .base_search import UnSortedSymbolTableTest
 
 
 @pytest.fixture
