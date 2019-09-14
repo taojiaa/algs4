@@ -3,7 +3,7 @@ import string
 from random import shuffle
 from src.sort.Selection import Selection
 from src.sort.Insertion import Insertion, Shells
-from src.sort.Merge import Merge, MergeBU
+from src.sort.Merge import Merge, MergeBU, MergeX
 
 
 def sort_test(sort_class):
@@ -30,3 +30,6 @@ class Test:
 
     def test_mergebu_sort(self):
         assert sort_test(MergeBU)
+
+    def test_mergex_sort(self):
+        assert sort_test(MergeX)
