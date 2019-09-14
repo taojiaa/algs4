@@ -2,6 +2,7 @@ import string
 
 from random import shuffle
 from src.sort.Selection import Selection
+from src.sort.Insertion import Insertion, Shells
 
 
 def sort_test(sort_class):
@@ -16,3 +17,9 @@ class Test:
 
     def test_selection_sort(self):
         assert sort_test(Selection)
+
+    def test_insertion_sort(self):
+        assert sort_test(Insertion)
+
+    def test_shells_sort(self):
+        assert sort_test(Shells)
