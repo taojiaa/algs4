@@ -4,6 +4,7 @@ from random import shuffle
 from src.sort.Selection import Selection
 from src.sort.Insertion import Insertion, Shells
 from src.sort.Merge import Merge, MergeBU, MergeX
+from src.sort.Quick import Quick
 
 
 def sort_test(sort_class):
@@ -33,3 +34,6 @@ class Test:
 
     def test_mergex_sort(self):
         assert sort_test(MergeX)
+
+    def test_quick_sort(self):
+        assert sort_test(Quick)
