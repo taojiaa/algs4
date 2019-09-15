@@ -4,11 +4,11 @@ from random import shuffle
 from src.sort.Selection import Selection
 from src.sort.Insertion import Insertion, Shells
 from src.sort.Merge import Merge, MergeBU, MergeX
-from src.sort.Quick import Quick
+from src.sort.Quick import Quick, QuickX
 
 
 def sort_test(sort_class):
-    array = list(string.ascii_lowercase)
+    array = list(string.ascii_lowercase) * 2
     shuffle(array)
     sc = sort_class()
     sorted_array = sc.sort(array)
@@ -37,3 +37,6 @@ class Test:
 
     def test_quick_sort(self):
         assert sort_test(Quick)
+
+    def test_quickx_sort(self):
+        assert sort_test(QuickX)

@@ -61,9 +61,9 @@ class MergeX(Merge):
     def __init__(self):
         super(MergeX, self).__init__()
 
-    def _sort(self, array, lo, hi, cut_off=3):
+    def _sort(self, array, lo, hi, cut_off=5):
         # Improvement 1: Use insertion to sort small subarrays.
-        if hi < lo + cut_off:
+        if hi - lo + 1 <= cut_off:
             self._insert_sort(array, lo, hi)
             return
         mid = lo + (hi - lo) // 2
