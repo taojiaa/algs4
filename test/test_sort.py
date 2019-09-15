@@ -5,6 +5,7 @@ from src.sort.Selection import Selection
 from src.sort.Insertion import Insertion, Shells
 from src.sort.Merge import Merge, MergeBU, MergeX
 from src.sort.Quick import Quick, QuickX
+from src.sort.PQ import HeapSort
 
 
 def sort_test(sort_class):
@@ -40,3 +41,6 @@ class Test:
 
     def test_quickx_sort(self):
         assert sort_test(QuickX)
+
+    def test_heap_sort(self):
+        assert sort_test(HeapSort)

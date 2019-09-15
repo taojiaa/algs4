@@ -1,5 +1,4 @@
 import string
-
 from random import shuffle
 
 from src.sort.PQ import MaxPQ

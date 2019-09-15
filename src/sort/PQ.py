@@ -1,3 +1,6 @@
+from .Base import Sort
+
+
 class MaxPQ:
 
     def __init__(self, N):
@@ -16,13 +19,13 @@ class MaxPQ:
         self._size = self._size + 1
         self.pq[self._size] = val
         self._swim(self._size)
-        
+
     def del_max(self):
         max_val = self.pq[1]
         self.pq[1], self.pq[self._size] = self.pq[self._size], self.pq[1]
         self.pq[self._size + 1] = None
         self._size = self._size - 1
-        self._sink(1)
+        self._sink(self.pq, 1, self.size())
         return max_val
 
     def _swim(self, k):
@@ -34,13 +37,13 @@ class MaxPQ:
                 break
             k = j
 
-    def _sink(self, k):
-        while (k * 2) <= self._size:
+    def _sink(self, array, k, N):
+        while (k * 2) <= N:
             j = k * 2
-            if j < self._size and self.pq[j] < self.pq[j + 1]:
+            if j < N and array[j] < array[j + 1]:
                 j = j + 1
-            if self.pq[k] < self.pq[j]:
-                self.pq[k], self.pq[j] = self.pq[j], self.pq[k]
+            if array[k] < array[j]:
+                array[k], array[j] = array[j], array[k]
             else:
                 break
             k = j
@@ -51,3 +54,22 @@ class MaxPQ:
         for i in range(len(self.pq)):
             temp_pq[i] = self.pq[i]
         self.pq = temp_pq
+
+
+class HeapSort(Sort, MaxPQ):
+
+    def __init__(self):
+        pass
+
+    def sort(self, array):
+        N = len(array)
+        array = [None] + array
+        # Make the heap-ordered.
+        for k in range(N // 2, 0, -1):
+            self._sink(array, k, N)
+        # Make the heap sorted.
+        while N > 1:
+            array[1], array[N] = array[N], array[1]
+            self._sink(array, 1, N - 1)
+            N = N - 1
+        return array[1:]
