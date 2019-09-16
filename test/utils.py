@@ -30,9 +30,3 @@ def ascii_generator():
     shuffle(words)
     return words
 
-
-def initiate(st_class):
-    words = ascii_generator()
-    st = st_class()
-    frequency_counter(st, words)
-    return st

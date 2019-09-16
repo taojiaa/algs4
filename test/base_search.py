@@ -1,6 +1,13 @@
 import string
 
-from .utils import initiate
+from .utils import ascii_generator, frequency_counter
+
+
+def initiate(st_class):
+    words = ascii_generator()
+    st = st_class()
+    frequency_counter(st, words)
+    return st
 
 
 class SortedSymbolTableTest:

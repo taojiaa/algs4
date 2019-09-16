@@ -20,7 +20,7 @@ class Quick(Sort):
         # The recursion is after the array processing.
         self._sort(array, lo, p - 1)
         self._sort(array, p + 1, hi)
-    
+
     def _partition(self, array, lo, hi):
         # Scan the array from left to right and right to left,
         # then find the "break" points i and j and exhcange them.
@@ -76,5 +76,3 @@ class QuickX(Quick):
                     array[j], array[j - 1] = array[j - 1], array[j]
                 else:
                     break
-
-
