@@ -8,7 +8,7 @@ flake8 = "*"
 pylint = "*"
 jupyter = "*"
 yapf = "*"
-pytest = "*"
+pytest = "==5.0.1"
 
 [packages]
 
