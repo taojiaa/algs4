@@ -29,4 +29,3 @@ def ascii_generator():
         words = words + [char] * (i + 1)
     shuffle(words)
     return words
-
