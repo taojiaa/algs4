@@ -1,7 +1,8 @@
 import os
-from src.graph.UndirectedGraph import Graph, DepthFirstSearch, DepthFirstPaths, BreadthFirstPaths
-
 from pathlib import Path
+
+from src.graph.UndirectedGraph import (CC, BreadthFirstPaths, DepthFirstPaths,
+                                       DepthFirstSearch, Graph)
 
 
 def initiate():
@@ -66,3 +67,17 @@ class TestBreadthFirstPaths:
         p = BreadthFirstPaths(g, 0)
         paths = [i for i in p.pathTo(4)]
         assert paths == [0, 6, 4] or paths == [0, 5, 4]
+
+
+class TestCC:
+
+    def test_connected(self):
+        g = initiate()
+        cc = CC(g)
+        assert cc.connected(0, 4)
+        assert not cc.connected(0, 9)
+
+    def test_count(self):
+        g = initiate()
+        cc = CC(g)
+        assert cc.count() == 3
