@@ -1,5 +1,6 @@
 from src.fundamental.Bag import Bag
 from src.fundamental.Stack import Stack
+from src.fundamental.Queue import Queue
 from .base_undirected_graph import Search, Paths
 
 
@@ -9,11 +10,11 @@ class Graph:
 
     def __init__(self, num_v=None, text=None):
         if text:
-            self.e = 0
+            self._e = 0
             self._init_from_text(text)
         elif num_v:
-            self.e = 0
-            self.v = num_v
+            self._e = 0
+            self._v = num_v
 
     def _init_from_text(self, text):
         def words_gen(fileobj):
@@ -23,12 +24,12 @@ class Graph:
 
         with open(text, 'r') as file:
             words = words_gen(file)
-            self.v = next(words)
+            self._v = next(words)
             e = next(words)
 
-            self._adj = [None] * self.v
+            self._adj = [None] * self._v
 
-            for i in range(self.v):
+            for i in range(self._v):
                 self._adj[i] = Bag()
 
             for i in range(e):
@@ -37,15 +38,15 @@ class Graph:
                 self.add_edge(v, w)
 
     def V(self):
-        return self.v
+        return self._v
 
     def E(self):
-        return self.e
+        return self._e
 
     def add_edge(self, v, w):
         self._adj[v].add(w)
         self._adj[w].add(v)
-        self.e = self.e + 1
+        self._e = self._e + 1
 
     def adj(self, v):
         return self._adj[v]
@@ -55,8 +56,8 @@ class Graph:
 
     def __repr__(self):
         s = ''
-        s = s + (self.v + " vertices, " + self.e + " edges " + '\n')
-        for i in range(self.v):
+        s = s + (self._v + " vertices, " + self._e + " edges " + '\n')
+        for i in range(self._v):
             s = s + (i + ": ")
             for w in self._adj[i]:
                 s = s + (w + " ")
@@ -67,18 +68,18 @@ class Graph:
 class DepthFirstSearch(Search):
 
     def __init__(self, G, s):
-        self.g = G
-        self.s = s
+        self._g = G
+        self._s = s
         self.dfs()
 
     def dfs(self):
-        self._marked = [False] * self.g.V()
+        self._marked = [False] * self._g.V()
         self._count = 0
-        self._dfs(self.g, self.s)
+        self._dfs(self._g, self._s)
 
     def _dfs(self, g, v):
         self._marked[v] = True
-        self._count = self._count + 1
+        self._count += 1
         for w in g.adj(v):
             if not self._marked[w]:
                 self._dfs(g, w)
@@ -93,19 +94,17 @@ class DepthFirstSearch(Search):
 class DepthFirstPaths(Paths):
 
     def __init__(self, G, s):
-        self.g = G
-        self.s = s
+        self._g = G
+        self._s = s
         self.dfs()
 
     def dfs(self):
-        self._marked = [False] * self.g.V()
-        self._edgeto = [False] * self.g.V()
-        self._count = 0
-        self._dfs(self.g, self.s)
+        self._marked = [False] * self._g.V()
+        self._edgeto = [False] * self._g.V()
+        self._dfs(self._g, self._s)
 
     def _dfs(self, g, v):
         self._marked[v] = True
-        self._count = self._count + 1
         for w in g.adj(v):
             if not self._marked[w]:
                 self._edgeto[w] = v
@@ -118,9 +117,42 @@ class DepthFirstPaths(Paths):
         if not self.hasPathTo(v):
             return None
         path = Stack()
-        while v != self.s:
+        while v != self._s:
             path.push(v)
             v = self._edgeto[v]
-        path.push(self.s)
+        path.push(self._s)
         return path
 
+
+class BreadthFirstPaths(Paths):
+
+    def __init__(self, G, s):
+        self._g = G
+        self._s = s
+        self.bfs()
+
+    def bfs(self):
+        self._queue = Queue()
+        self._marked = [None] * self._g.V()
+        self._edgeto = [None] * self._g.V()
+        self._queue.enqueue(self._s)
+        while not self._queue.is_empty():
+            v = self._queue.dequeue()
+            for w in self._g.adj(v):
+                if not self._marked[w]:
+                    self._edgeto[w] = v
+                    self._marked[w] = True
+                    self._queue.enqueue(w)
+
+    def hasPathTo(self, v):
+        return self._marked[v]
+
+    def pathTo(self, v):
+        if not self.hasPathTo(v):
+            return None
+        path = Stack()
+        while v != self._s:
+            path.push(v)
+            v = self._edgeto[v]
+        path.push(self._s)
+        return path

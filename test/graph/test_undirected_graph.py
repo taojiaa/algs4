@@ -1,5 +1,5 @@
 import os
-from src.graph.UndirectedGraph import Graph, DepthFirstSearch, DepthFirstPaths
+from src.graph.UndirectedGraph import Graph, DepthFirstSearch, DepthFirstPaths, BreadthFirstPaths
 
 from pathlib import Path
 
@@ -53,3 +53,16 @@ class TestDepthFirstPaths:
         paths = [i for i in p.pathTo(4)]
         assert paths == [0, 6, 4] or paths == [0, 5, 4]
 
+
+class TestBreadthFirstPaths:
+
+    def test_has_path_to(self):
+        g = initiate()
+        p = BreadthFirstPaths(g, 0)
+        assert p.hasPathTo(6)
+
+    def test_path_to(self):
+        g = initiate()
+        p = BreadthFirstPaths(g, 0)
+        paths = [i for i in p.pathTo(4)]
+        assert paths == [0, 6, 4] or paths == [0, 5, 4]
