@@ -10,14 +10,18 @@ class Stack:
     def push(self, val):
         if self._size > len(self._stack) // 2:
             self._resize(len(self._stack) * 2)
-        self._stack.append(val)
+        self._stack[self._size] = val
         self._size = self._size + 1
 
     def pop(self):
         if self.is_empty():
             return None
         self._size = self._size - 1
-        return self._stack.pop()
+        pop = self._stack[self._size]
+        self._stack[self._size] = None
+        if self._size < len(self._stack) // 4:
+            self._resize(len(self._stack) // 2)
+        return pop
 
     def size(self):
         return self._size
