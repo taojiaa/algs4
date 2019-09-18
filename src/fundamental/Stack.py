@@ -11,30 +11,34 @@ class Stack:
         if self._size > len(self._stack) // 2:
             self._resize(len(self._stack) * 2)
         self._stack[self._size] = val
-        self._size = self._size + 1
+        self._size += 1
 
     def pop(self):
         if self.is_empty():
-            return None
-        self._size = self._size - 1
-        pop = self._stack[self._size]
-        self._stack[self._size] = None
-        if self._size < len(self._stack) // 4:
-            self._resize(len(self._stack) // 2)
-        return pop
+            raise ValueError('The stack is already empty.')
+        else:
+            self._size -= 1
+            item = self._stack[self._size]
+            self._stack[self._size] = None
+            if self._size < len(self._stack) // 4:
+                self._resize(len(self._stack) // 2)
+            return item
 
     def size(self):
         return self._size
 
     def _resize(self, n):
         temp = [None] * n
-        for i in range(len(self._stack)):
+        for i in range(self._size):
             temp[i] = self._stack[i]
         self._stack = temp
 
     def __iter__(self):
+        n = self._size
         while True:
-            if self.is_empty():
+            if n <= 0:
                 return
             else:
-                yield self.pop()
+                yield self._stack[n - 1]
+                n -= 1
+
