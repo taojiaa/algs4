@@ -46,7 +46,7 @@ class Graph:
     def add_edge(self, v, w):
         self._adj[v].add(w)
         self._adj[w].add(v)
-        self._e = self._e + 1
+        self._e += 1
 
     def adj(self, v):
         return self._adj[v]
