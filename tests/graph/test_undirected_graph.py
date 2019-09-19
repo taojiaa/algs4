@@ -7,7 +7,7 @@ from src.graph.UndirectedGraph import (CC, BreadthFirstPaths, DepthFirstPaths,
 
 def initiate():
     root_dir = Path(__file__).resolve().parents[0]
-    file_path = os.path.join(root_dir, 'tinyG.txt')
+    file_path = os.path.join(root_dir, 'files/tinyG.txt')
     return Graph(text=file_path)
 
 
@@ -23,7 +23,7 @@ class TestGraph:
 
     def test_adj(self):
         g = initiate()
-        adj = [i for i in g.adj[0]]
+        adj = [i for i in g.adj(0)]
         assert adj == [6, 2, 1, 5]
 
 
