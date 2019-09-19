@@ -4,9 +4,6 @@ from src.fundamental.Queue import Queue
 from .base_undirected_graph import Search, Paths
 
 
-__all__ = ['Graph']
-
-
 class Graph:
 
     # Only allows int val to identify node
@@ -69,7 +66,6 @@ class Graph:
 
 
 class DepthFirstSearch(Search):
-
     def __init__(self, G, s):
         self._g = G
         self._s = s
@@ -95,7 +91,6 @@ class DepthFirstSearch(Search):
 
 
 class DepthFirstPaths(Paths):
-
     def __init__(self, G, s):
         self._g = G
         self._s = s
@@ -128,7 +123,6 @@ class DepthFirstPaths(Paths):
 
 
 class BreadthFirstPaths(Paths):
-
     def __init__(self, G, s):
         self._g = G
         self._s = s
@@ -162,7 +156,6 @@ class BreadthFirstPaths(Paths):
 
 
 class CC:
-
     def __init__(self, G):
         self._g = G
         self._count = 0
@@ -198,7 +191,6 @@ class CC:
 
 
 class Cycle:
-
     def __init__(self, G):
         self._g = G
         self._has_cycle = False
@@ -224,7 +216,6 @@ class Cycle:
 
 
 class TwoColor:
-
     def __init__(self, G):
         self._g = G
         self._is_twocolorable = True

@@ -1,8 +1,8 @@
 import os
 from pathlib import Path
 
-from src.graph.UndirectedGraph import (CC, BreadthFirstPaths, DepthFirstPaths,
-                                       DepthFirstSearch, Graph)
+from src.graph.Graph import (CC, BreadthFirstPaths, DepthFirstPaths,
+                             DepthFirstSearch, Graph)
 
 
 def initiate():
@@ -12,7 +12,6 @@ def initiate():
 
 
 class TestGraph:
-
     def test_v(self):
         g = initiate()
         assert g.V() == 13
@@ -28,7 +27,6 @@ class TestGraph:
 
 
 class TestDepthFirstSearch:
-
     def test_count(self):
         g = initiate()
         s = DepthFirstSearch(g, 0)
@@ -42,7 +40,6 @@ class TestDepthFirstSearch:
 
 
 class TestDepthFirstPaths:
-
     def test_has_path_to(self):
         g = initiate()
         p = DepthFirstPaths(g, 0)
@@ -56,7 +53,6 @@ class TestDepthFirstPaths:
 
 
 class TestBreadthFirstPaths:
-
     def test_has_path_to(self):
         g = initiate()
         p = BreadthFirstPaths(g, 0)
@@ -70,7 +66,6 @@ class TestBreadthFirstPaths:
 
 
 class TestCC:
-
     def test_connected(self):
         g = initiate()
         cc = CC(g)
