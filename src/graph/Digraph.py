@@ -1,4 +1,3 @@
-from src.fundamental.Bag import Bag
 from src.fundamental.Stack import Stack
 from src.fundamental.Queue import Queue
 
@@ -15,9 +14,9 @@ class Digraph(Graph):
         self._e += 1
 
     def reverse(self):
-        r = Digraph(self._v)
+        r = Digraph(num_v=self._v)
         for i in range(self._v):
-            for w in self._g.adj(i):
+            for w in self.adj(i):
                 r.add_edge(w, i)
         return r
 
@@ -78,8 +77,9 @@ class DepthFirstOrder:
         self._pre = Queue()
         self._post = Queue()
         self._reverse_post = Stack()
+        self._depth_first_order()
 
-    def dfs(self):
+    def _depth_first_order(self):
         self._marked = [None] * self._g.V()
         for v in range(self._g.V()):
             if not self._marked[v]:
@@ -123,9 +123,20 @@ class Topological:
         return self._order is not None
 
 
-class SCC(CC):
+class KosarajuSCC(CC):
     def __init__(self, G):
-        super().__init__(G)
+        self._g = G
+        self._count = 0
+        self._kosarajuscc()
+
+    def _kosarajuscc(self):
+        self._marked = [None] * self._g.V()
+        self._id = [None] * self._g.V()
+        orders = DepthFirstOrder(self._g.reverse()).reverse_post()
+        for s in orders:
+            if not self._marked[s]:
+                self._dfs(self._g, s)
+                self._count += 1
 
     def strongly_connected(self, v, w):
         return self._id[v] == self._id[w]

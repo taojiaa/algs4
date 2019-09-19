@@ -9,12 +9,12 @@ class Graph:
     # Only allows int val to identify node
 
     def __init__(self, num_v=None, text=None):
-        if text:
-            self._e = 0
+        self._e = 0
+        if text is not None:
             self._init_from_text(text)
-        elif num_v:
-            self._e = 0
+        elif num_v is not None:
             self._v = num_v
+            self._init_adj()
 
     def _init_from_text(self, text):
         def words_gen(fileobj):
@@ -27,15 +27,16 @@ class Graph:
             self._v = next(words)
             e = next(words)
 
-            self._adj = [None] * self._v
-
-            for i in range(self._v):
-                self._adj[i] = Bag()
-
-            for i in range(e):
+            self._init_adj()
+            for _ in range(e):
                 v = next(words)
                 w = next(words)
                 self.add_edge(v, w)
+
+    def _init_adj(self):
+        self._adj = [None] * self._v
+        for i in range(self._v):
+            self._adj[i] = Bag()
 
     def V(self):
         return self._v
