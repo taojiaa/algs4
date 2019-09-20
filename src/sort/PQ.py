@@ -2,7 +2,7 @@ from .Base import Sort
 
 
 class PQ:
-    def __init__(self, N):
+    def __init__(self, N=2):
         self.pq = [None] * (N + 1)
         self._size = 0
 
@@ -26,16 +26,16 @@ class PQ:
             temp_pq[i] = self.pq[i]
         self.pq = temp_pq
 
-    def _swim(self):
+    def _swim(self, size):
         pass
 
-    def _sink(self):
+    def _sink(self, size):
         pass
 
 
 class MaxPQ(PQ):
 
-    def __init__(self, N):
+    def __init__(self, N=2):
         super().__init__(N)
 
     def del_max(self):
@@ -68,7 +68,7 @@ class MaxPQ(PQ):
 
 
 class MinPQ(PQ):
-    def __init__(self, N):
+    def __init__(self, N=2):
         super().__init__(N)
 
     def del_min(self):

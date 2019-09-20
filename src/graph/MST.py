@@ -33,6 +33,18 @@ class Edge:
         else:
             return -1
 
+    def __gt__(self, other):
+        return self._weight > other._weight
+
+    def __lt__(self, other):
+        return self._weight < other._weight
+
+    def __ge__(self, other):
+        return self._weight >= other._weight
+
+    def __le__(self, other):
+        return self._weight <= other._weight
+
 
 class EdgeWeightGraph(Graph):
     def __init__(self, **kwargs):
@@ -42,15 +54,18 @@ class EdgeWeightGraph(Graph):
         def words_gen(fileobj):
             for line in fileobj:
                 for word in line.split():
-                    yield int(word)
+                    yield word
+
         with open(text, 'r') as file:
             words = words_gen(file)
-            self._v = next(words)
-            num_e = next(words)
+            self._v = int(next(words))
+            num_e = int(next(words))
 
             self._init_adj()
             for _ in range(num_e):
-                e = Edge(next(words), next(words), next(words))
+                tv1, tv2, tw = int(next(words)), int(next(words)), float(
+                    next(words))
+                e = Edge(tv1, tv2, tw)
                 self.add_edge(e)
 
     def add_edge(self, e):
@@ -90,9 +105,9 @@ class LazyPrimMST:
             self._mst.enqueue(e)
             self._weight += e.weight()
             if not self._marked[v]:
-                self._visit(self.g, v)
+                self._visit(self._g, v)
             if not self._marked[w]:
-                self._visit(self.g, w)
+                self._visit(self._g, w)
 
     def _visit(self, g, v):
         self._marked[v] = True
