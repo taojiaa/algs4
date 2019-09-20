@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from src.graph.MST import Edge, EdgeWeightGraph, LazyPrimMST
+from src.graph.MST import Edge, EdgeWeightGraph, LazyPrimMST, PrimMST
 
 
 def initiate(file_name):
@@ -20,8 +20,14 @@ class TestEdgeWeightGraph:
 
 
 class TestLazyPrimMST:
-
     def test_weight(self):
         g = initiate('files/tinyEWG.txt')
         mst = LazyPrimMST(g)
-        assert mst.weight() == 1.81
+        assert round(mst.weight(), 2) == 1.81
+
+
+class TestPrimMST:
+    def test_weight(self):
+        g = initiate('files/tinyEWG.txt')
+        mst = PrimMST(g)
+        assert round(mst.weight(), 2) == 1.81
