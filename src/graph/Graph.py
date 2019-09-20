@@ -1,13 +1,13 @@
 from src.fundamental.Bag import Bag
-from src.fundamental.Stack import Stack
 from src.fundamental.Queue import Queue
-from .base_undirected_graph import Search, Paths
+from src.fundamental.Stack import Stack
+
+from .base_undirected_graph import Paths, Search
 
 
 class Graph:
 
     # Only allows int val to identify node
-
     def __init__(self, num_v=None, text=None):
         self._e = 0
         if text is not None:
@@ -21,14 +21,13 @@ class Graph:
             for line in fileobj:
                 for word in line.split():
                     yield int(word)
-
         with open(text, 'r') as file:
             words = words_gen(file)
             self._v = next(words)
-            e = next(words)
+            num_e = next(words)
 
             self._init_adj()
-            for _ in range(e):
+            for _ in range(num_e):
                 v = next(words)
                 w = next(words)
                 self.add_edge(v, w)
