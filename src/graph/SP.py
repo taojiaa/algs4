@@ -149,9 +149,10 @@ class AcyclicSP:
             self._distto[i] = float('inf')
 
         self._distto[s] = 0.0
-        topo = Topological(self._g)
-
-        for i in topo.order():
+        top = Topological(self._g)
+        if not top.has_order():
+            raise ValueError('Digraph is not acyclic.')
+        for i in top.order():
             self._relax(self._g, i)
 
     def _relax(self, g, v):
@@ -177,3 +178,84 @@ class AcyclicSP:
             stack.push(e)
             e = self._edgeto[w]
         return stack
+
+
+class AcyclicLP:
+    def __init__(self, G, s):
+        self._g = G
+        self._s = s
+        self._acycliclp(self._s)
+
+    def _acycliclp(self, s):
+        self._edgeto = [None] * self._g.V()
+        self._distto = [None] * self._g.V()
+
+        for i in range(len(self._distto)):
+            self._distto[i] = float('-inf')
+
+        self._distto[s] = 0.0
+        top = Topological(self._g)
+        if not top.has_order():
+            raise ValueError('Digraph is not acyclic.')
+        for i in top.order():
+            self._relax(self._g, i)
+
+    def _relax(self, g, v):
+        for e in g.adj(v):
+            w = e.To()
+            if self._distto[w] < self._distto[v] + e.weight():
+                self._distto[w] = self._distto[v] + e.weight()
+                self._edgeto[w] = e
+
+    def distTo(self, v):
+        return self._distto[v]
+
+    def hasPathTo(self, v):
+        return self._distto[v] < float('inf')
+
+    def pathTo(self, v):
+        if not self.hasPathTo(v):
+            return None
+        stack = Stack()
+        e = self._edgeto[v]
+        while e.From() is not None:
+            w = e.From()
+            stack.push(e)
+            e = self._edgeto[w]
+        return stack
+
+
+class CPM:
+    def __init__(self, text):
+        self._read(text)
+        self._cpm()
+
+    def _read(self, text):
+        def stripped_lines(f):
+            return (l.rstrip("\n") for l in f)
+
+        with open(text) as file:
+            lines = stripped_lines(file) 
+
+            V = int(next(lines))
+            self._g = EdgeWeightedDigraph(2 * V + 2)
+            self._s = 2 * V
+            self._t = 2 * V + 1
+
+            for i, line in enumerate(lines):
+                line = line.split(' ')
+                duration = float(line[0])
+                self._g.add_edge(DirectedEdge(i, i + V, duration))
+                self._g.add_edge(DirectedEdge(self._s, i, 0))
+                self._g.add_edge(DirectedEdge(i + V, self._t, 0))
+                for successor in line[2:]:
+                    self._g.add_edge(DirectedEdge(i + V, successor, 0))
+
+    def _cpm(self):
+        self._lp = AcyclicLP(self._g, self._s)
+
+    def start_time(self, v):
+        return self._lp._distto[v]
+
+    def finish_time(self):
+        return self._lp._distto[self._t]

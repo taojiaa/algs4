@@ -157,8 +157,11 @@ class Topological:
     def order(self):
         return self._order
 
-    def is_dag(self):
+    def has_order(self):
         return self._order is not None
+
+    def is_dag(self):
+        return self.has_order()
 
 
 class KosarajuSCC(CC):
