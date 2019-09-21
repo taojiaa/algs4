@@ -55,8 +55,9 @@ class EdgeWeightedDigraph(Digraph):
                 self.add_edge(e)
 
     def add_edge(self, e):
-        self._adj[e.From()].add(e)
-        self._indegree += 1
+        w = e.From()
+        self._adj[w].add(e)
+        self._indegree[w] += 1
         self._e += 1
 
     def edges(self):
