@@ -65,7 +65,7 @@ class EdgeWeightedGraph(Graph):
                 tw = float(next(words))
                 e = Edge(v1, v2, tw)
                 self.add_edge(e)
-    
+
     def V(self, *args, **kwargs):
         return super().V(*args, **kwargs)
 

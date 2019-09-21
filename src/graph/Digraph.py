@@ -2,7 +2,7 @@ from src.fundamental.Stack import Stack
 from src.fundamental.Queue import Queue
 from src.fundamental.Bag import Bag
 
-from .Graph import DepthFirstSearch, Cycle, CC
+from .Graph import DepthFirstSearch, CC
 from .utils import words_gen
 
 
@@ -56,7 +56,7 @@ class Digraph:
         return self._e
 
     def adj(self, v):
-        return self._adj[v] 
+        return self._adj[v]
 
 
 class DirectedDFS(DepthFirstSearch):
