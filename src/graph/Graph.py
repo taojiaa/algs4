@@ -2,7 +2,7 @@ from src.fundamental.Bag import Bag
 from src.fundamental.Queue import Queue
 from src.fundamental.Stack import Stack
 
-from .base_undirected_graph import Paths, Search
+from .base import Paths, Search
 from .utils import words_gen
 
 
@@ -47,7 +47,7 @@ class Graph:
     def degree(self, v):
         return self._adj[v].size()
 
-    def __repr__(self):
+    def to_string(self):
         s = ''
         s = s + (self._v + " vertices, " + self._e + " edges " + '\n')
         for i in range(self._v):

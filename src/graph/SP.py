@@ -1,6 +1,8 @@
 from src.fundamental.Bag import Bag
+from src.fundamental.Stack import Stack
+from src.sort.PQ import IndexMinPQ
 
-from .Digraph import Digraph
+from .Digraph import Digraph, Topological
 from .utils import words_gen
 
 
@@ -19,9 +21,20 @@ class DirectedEdge:
     def weight(self):
         return self._weight
 
+    def __gt__(self, other):
+        return self._weight > other._weight
+
+    def __lt__(self, other):
+        return self._weight < other._weight
+
+    def __ge__(self, other):
+        return self._weight >= other._weight
+
+    def __le__(self, other):
+        return self._weight <= other._weight
+
 
 class EdgeWeightedDigraph(Digraph):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -73,3 +86,94 @@ class EdgeWeightedDigraph(Digraph):
         pass
 
 
+class DijkstraSP:
+    def __init__(self, G, s):
+        self._g = G
+        self._s = s
+        self._dijkstrasp(self._s)
+
+    def _dijkstrasp(self, s):
+        self._edgeto = [None] * self._g.V()
+        self._distto = [None] * self._g.V()
+        self._pq = IndexMinPQ(self._g.V())
+
+        for i in range(len(self._distto)):
+            self._distto[i] = float('inf')
+
+        self._distto[s] = 0.0
+        self._pq.insert(s, 0.0)
+
+        while not self._pq.is_empty():
+            self._relax(self._g, self._pq.del_min())
+
+    def _relax(self, g, v):
+        for e in g.adj(v):
+            w = e.To()
+            if self._distto[w] > self._distto[v] + e.weight():
+                self._distto[w] = self._distto[v] + e.weight()
+                self._edgeto[w] = e
+                if self._pq.contains(w):
+                    self._pq.change(w, self._distto[w])
+                else:
+                    self._pq.insert(w, self._distto[w])
+
+    def distTo(self, v):
+        return self._distto[v]
+
+    def hasPathTo(self, v):
+        return self._distto[v] < float('inf')
+
+    def pathTo(self, v):
+        if not self.hasPathTo(v):
+            return None
+        stack = Stack()
+        e = self._edgeto[v]
+        while e.From() is not None:
+            w = e.From()
+            stack.push(e)
+            e = self._edgeto[w]
+        return stack
+
+
+class AcyclicSP:
+    def __init__(self, G, s):
+        self._g = G
+        self._s = s
+        self._acyclicsp(self._s)
+
+    def _acyclicsp(self, s):
+        self._edgeto = [None] * self._g.V()
+        self._distto = [None] * self._g.V()
+
+        for i in range(len(self._distto)):
+            self._distto[i] = float('inf')
+
+        self._distto[s] = 0.0
+        topo = Topological(self._g)
+
+        for i in topo.order():
+            self._relax(self._g, i)
+
+    def _relax(self, g, v):
+        for e in g.adj(v):
+            w = e.To()
+            if self._distto[w] > self._distto[v] + e.weight():
+                self._distto[w] = self._distto[v] + e.weight()
+                self._edgeto[w] = e
+
+    def distTo(self, v):
+        return self._distto[v]
+
+    def hasPathTo(self, v):
+        return self._distto[v] < float('inf')
+
+    def pathTo(self, v):
+        if not self.hasPathTo(v):
+            return None
+        stack = Stack()
+        e = self._edgeto[v]
+        while e.From() is not None:
+            w = e.From()
+            stack.push(e)
+            e = self._edgeto[w]
+        return stack

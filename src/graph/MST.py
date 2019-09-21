@@ -93,7 +93,7 @@ class EdgeWeightedGraph(Graph):
                     b.add(e)
         return b
 
-    def __repr__(self):
+    def to_string(self):
         # todo
         pass
 
