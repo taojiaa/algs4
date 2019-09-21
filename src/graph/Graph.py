@@ -3,39 +3,32 @@ from src.fundamental.Queue import Queue
 from src.fundamental.Stack import Stack
 
 from .base_undirected_graph import Paths, Search
+from .utils import words_gen
 
 
 class Graph:
+    # Only allows int val to identify vertex
+    def __init__(self, _input):
+        if isinstance(_input, int):
+            self._v = _input
+            self._e = 0
+            self._adj = [Bag() for i in range(self._v)]
+        else:
+            if isinstance(_input, str) and '.txt' in _input:
+                self._read(_input)
 
-    # Only allows int val to identify node
-    def __init__(self, num_v=None, text=None):
-        self._e = 0
-        if text is not None:
-            self._init_from_text(text)
-        elif num_v is not None:
-            self._v = num_v
-            self._init_adj()
-
-    def _init_from_text(self, text):
-        def words_gen(fileobj):
-            for line in fileobj:
-                for word in line.split():
-                    yield int(word)
+    def _read(self, text):
         with open(text, 'r') as file:
             words = words_gen(file)
-            self._v = next(words)
-            num_e = next(words)
+            self._v = int(next(words))
+            self._e = 0
+            self._adj = [Bag() for i in range(self._v)]
 
-            self._init_adj()
+            num_e = int(next(words))
             for _ in range(num_e):
-                v = next(words)
-                w = next(words)
+                v = int(next(words))
+                w = int(next(words))
                 self.add_edge(v, w)
-
-    def _init_adj(self):
-        self._adj = [None] * self._v
-        for i in range(self._v):
-            self._adj[i] = Bag()
 
     def V(self):
         return self._v
@@ -94,9 +87,9 @@ class DepthFirstPaths(Paths):
     def __init__(self, G, s):
         self._g = G
         self._s = s
-        self.dfs()
+        self._depthfirstpaths()
 
-    def dfs(self):
+    def _depthfirstpaths(self):
         self._marked = [False] * self._g.V()
         self._edgeto = [False] * self._g.V()
         self._dfs(self._g, self._s)
@@ -126,9 +119,9 @@ class BreadthFirstPaths(Paths):
     def __init__(self, G, s):
         self._g = G
         self._s = s
-        self.bfs()
+        self._breadthfirstpaths()
 
-    def bfs(self):
+    def _breadthfirstpaths(self):
         self._queue = Queue()
         self._marked = [None] * self._g.V()
         self._edgeto = [None] * self._g.V()
@@ -159,9 +152,9 @@ class CC:
     def __init__(self, G):
         self._g = G
         self._count = 0
-        self.dfs()
+        self._cc()
 
-    def dfs(self):
+    def _cc(self):
         # The components are different from the previous one,
         # becasue it doesn't specify that connected to 0 or one specific node.
         self._marked = [None] * self._g.V()
@@ -194,9 +187,9 @@ class Cycle:
     def __init__(self, G):
         self._g = G
         self._has_cycle = False
-        self.dfs()
+        self._cycle()
 
-    def dfs(self):
+    def _cycle(self):
         self._marked = [None] * self._g.V()
         for s in range(self._g.V()):
             if not self._marked[s]:
@@ -219,9 +212,9 @@ class TwoColor:
     def __init__(self, G):
         self._g = G
         self._is_twocolorable = True
-        self.dfs()
+        self._twocolor()
 
-    def dfs(self):
+    def _twocolor(self):
         self._marked = [None] * self._g.V()
         self._colors = [None] * self._g.V()
         for s in range(self._g.V()):

@@ -1,8 +1,9 @@
 from src.fundamental.Bag import Bag
 from src.fundamental.Queue import Queue
-from src.sort.PQ import MinPQ, IndexMinPQ
+from src.sort.PQ import IndexMinPQ, MinPQ
 
 from .Graph import Graph
+from .utils import words_gen
 
 
 class Edge:
@@ -46,27 +47,36 @@ class Edge:
         return self._weight <= other._weight
 
 
-class EdgeWeightGraph(Graph):
-    def __init__(self, **kwargs):
-        super(EdgeWeightGraph, self).__init__(**kwargs)
+class EdgeWeightedGraph(Graph):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-    def _init_from_text(self, text):
-        def words_gen(fileobj):
-            for line in fileobj:
-                for word in line.split():
-                    yield word
-
+    def _read(self, text):
         with open(text, 'r') as file:
             words = words_gen(file)
             self._v = int(next(words))
-            num_e = int(next(words))
+            self._e = 0
+            self._adj = [Bag() for i in range(self._v)]
 
-            self._init_adj()
+            num_e = int(next(words))
             for _ in range(num_e):
-                tv1, tv2, tw = int(next(words)), int(next(words)), float(
-                    next(words))
-                e = Edge(tv1, tv2, tw)
+                v1 = int(next(words))
+                v2 = int(next(words))
+                tw = float(next(words))
+                e = Edge(v1, v2, tw)
                 self.add_edge(e)
+    
+    def V(self, *args, **kwargs):
+        return super().V(*args, **kwargs)
+
+    def E(self, *args, **kwargs):
+        return super().E(*args, **kwargs)
+
+    def adj(self, *args, **kwargs):
+        return super().adj(*args, **kwargs)
+
+    def degree(self, *args, **kwargs):
+        return super().degree(*args, **kwargs)
 
     def add_edge(self, e):
         v = e.either()
@@ -82,6 +92,10 @@ class EdgeWeightGraph(Graph):
                 if e.other(v) > v:
                     b.add(e)
         return b
+
+    def __repr__(self):
+        # todo
+        pass
 
 
 class LazyPrimMST:

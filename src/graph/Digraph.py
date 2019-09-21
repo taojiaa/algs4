@@ -1,24 +1,62 @@
 from src.fundamental.Stack import Stack
 from src.fundamental.Queue import Queue
+from src.fundamental.Bag import Bag
 
-from .Graph import Graph, DepthFirstSearch, Cycle, CC
+from .Graph import DepthFirstSearch, Cycle, CC
+from .utils import words_gen
 
 
-class Digraph(Graph):
+class Digraph:
+    def __init__(self, _input):
+        if isinstance(_input, int):
+            self._v = _input
+            self._e = 0
+            self._adj = [Bag() for i in range(self._v)]
+            self._indegree = [0] * self._v
+        else:
+            if isinstance(_input, str) and '.txt' in _input:
+                self._read(_input)
 
-    def __init__(self, **kwargs):
-        super(Digraph, self).__init__(**kwargs)
+    def _read(self, text):
+        with open(text, 'r') as file:
+            words = words_gen(file)
+            self._v = int(next(words))
+            self._e = 0
+            self._adj = [Bag() for i in range(self._v)]
+            self._indegree = [0] * self._v
+
+            num_e = int(next(words))
+            for _ in range(num_e):
+                v = int(next(words))
+                w = int(next(words))
+                self.add_edge(v, w)
 
     def add_edge(self, v, w):
         self._adj[v].add(w)
+        self._indegree[w] += 1
         self._e += 1
 
     def reverse(self):
-        r = Digraph(num_v=self._v)
+        r = Digraph(self._v)
         for i in range(self._v):
             for w in self.adj(i):
                 r.add_edge(w, i)
         return r
+
+    def indegree(self, v):
+        return self._indegree[v]
+
+    def outdegree(self, v):
+        return self._adj[v].size()
+
+    def V(self):
+        return self._v
+
+    def E(self):
+        return self._e
+
+    def adj(self, v):
+        return self._adj[v] 
 
 
 class DirectedDFS(DepthFirstSearch):
@@ -27,13 +65,13 @@ class DirectedDFS(DepthFirstSearch):
         super().__init__(G, s)
 
 
-class DirectedCycle(Cycle):
+class DirectedCycle:
     def __init__(self, G):
         self._g = G
         self._cycle = None
-        self.dfs()
+        self._directedcycle()
 
-    def dfs(self):
+    def _directedcycle(self):
         self._marked = [None] * self._g.V()
         self._edgeto = [None] * self._g.V()
         self._onstack = [None] * self._g.V()
@@ -77,9 +115,9 @@ class DepthFirstOrder:
         self._pre = Queue()
         self._post = Queue()
         self._reverse_post = Stack()
-        self._depth_first_order()
+        self._depthfirstorder()
 
-    def _depth_first_order(self):
+    def _depthfirstorder(self):
         self._marked = [None] * self._g.V()
         for v in range(self._g.V()):
             if not self._marked[v]:
@@ -108,9 +146,9 @@ class Topological:
     def __init__(self, G):
         self._g = G
         self._order = None
-        self._topo()
+        self._topological()
 
-    def _topo(self):
+    def _topological(self):
         c_finder = DirectedCycle(self._g)
         if not c_finder.has_cycle():
             dfs = DepthFirstOrder(self._g)
@@ -138,5 +176,14 @@ class KosarajuSCC(CC):
                 self._dfs(self._g, s)
                 self._count += 1
 
-    def strongly_connected(self, v, w):
-        return self._id[v] == self._id[w]
+    def _dfs(self, *args, **kwargs):
+        return super()._dfs(*args, **kwargs)
+
+    def connected(self, *args, **kwargs):
+        return super().connected(*args, **kwargs)
+
+    def id(self, *args, **kwargs):
+        return super().id(*args, **kwargs)
+
+    def count(self, *args, **kwargs):
+        return super().count(*args, **kwargs)
