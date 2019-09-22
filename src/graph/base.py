@@ -149,6 +149,34 @@ class Edge:
         return self._weight <= other._weight
 
 
+class DirectedEdge:
+    def __init__(self, v, w, weight):
+        self._v = v
+        self._w = w
+        self._weight = weight
+
+    def From(self):
+        return self._v
+
+    def To(self):
+        return self._w
+
+    def weight(self):
+        return self._weight
+
+    def __gt__(self, other):
+        return self._weight > other._weight
+
+    def __lt__(self, other):
+        return self._weight < other._weight
+
+    def __ge__(self, other):
+        return self._weight >= other._weight
+
+    def __le__(self, other):
+        return self._weight <= other._weight
+
+
 class EdgeWeightedGraph(Graph):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -198,34 +226,6 @@ class EdgeWeightedGraph(Graph):
     def to_string(self):
         # todo
         pass
-
-
-class DirectedEdge:
-    def __init__(self, v, w, weight):
-        self._v = v
-        self._w = w
-        self._weight = weight
-
-    def From(self):
-        return self._v
-
-    def To(self):
-        return self._w
-
-    def weight(self):
-        return self._weight
-
-    def __gt__(self, other):
-        return self._weight > other._weight
-
-    def __lt__(self, other):
-        return self._weight < other._weight
-
-    def __ge__(self, other):
-        return self._weight >= other._weight
-
-    def __le__(self, other):
-        return self._weight <= other._weight
 
 
 class EdgeWeightedDigraph(Digraph):

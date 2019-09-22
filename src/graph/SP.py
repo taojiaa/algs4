@@ -3,7 +3,8 @@ from src.fundamental.Stack import Stack
 from src.sort.PQ import IndexMinPQ
 
 from .base import DirectedEdge, EdgeWeightedDigraph
-from .Digraph import Topological, EdgeWeightedDirectedCycle
+from .order import Topological
+from .cycle import EdgeWeightedDirectedCycle
 
 
 class DijkstraSP:
@@ -154,7 +155,7 @@ class CPM:
         def stripped_lines(f):
             return (l.rstrip("\n") for l in f)
 
-        with open(text) as file:
+        with open(text, 'r') as file:
             lines = stripped_lines(file)
 
             V = int(next(lines))
@@ -169,7 +170,7 @@ class CPM:
                 self._g.add_edge(DirectedEdge(self._s, i, 0))
                 self._g.add_edge(DirectedEdge(i + V, self._t, 0))
                 for successor in line[2:]:
-                    self._g.add_edge(DirectedEdge(i + V, successor, 0))
+                    self._g.add_edge(DirectedEdge(i + V, int(successor), 0))
 
     def _cpm(self):
         self._lp = AcyclicLP(self._g, self._s)
@@ -199,6 +200,10 @@ class BellmanFordSP:
 
         for i in range(len(self._distto)):
             self._distto[i] = float('inf')
+
+        self._distto[self._s] = 0
+        self._q.enqueue(self._s)
+        self._onq[self._s] = True
 
         while not self._q.is_empty() and not self.has_negative_cycle():
             v = self._q.dequeue()
@@ -230,3 +235,23 @@ class BellmanFordSP:
                 ewd.add_edge(e)
         finder = EdgeWeightedDirectedCycle(ewd)
         self._cycle = finder.has_cycle()
+
+    def distTo(self, v):
+        if self.has_negative_cycle():
+            raise ValueError('Negative cost cycle exists.')
+        return self._distto[v]
+
+    def hasPathTo(self, v):
+        return self._distto[v] < float('inf')
+
+    def pathTo(self, v):
+        if self.has_negative_cycle():
+            raise ValueError('Negative cost cycle exists.')
+        if not self.hasPathTo(v):
+            return None
+        stack = Stack()
+        e = self._edgeto[v]
+        while e is not None:
+            stack.push(e)
+            e = self._edgeto[e.From()]
+        return stack
