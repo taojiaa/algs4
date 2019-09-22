@@ -1,5 +1,6 @@
 from src.fundamental.Bag import Bag
 from src.fundamental.Stack import Stack
+from src.fundamental.Queue import Queue
 from src.sort.PQ import IndexMinPQ
 
 from .Digraph import Digraph, Topological
@@ -236,7 +237,7 @@ class CPM:
             return (l.rstrip("\n") for l in f)
 
         with open(text) as file:
-            lines = stripped_lines(file) 
+            lines = stripped_lines(file)
 
             V = int(next(lines))
             self._g = EdgeWeightedDigraph(2 * V + 2)
@@ -260,3 +261,95 @@ class CPM:
 
     def finish_time(self):
         return self._lp._distto[self._t]
+
+
+class EdgeWeightedDirectedCycle:
+    def __init__(self, G):
+        self._g = G
+        self._cycle = None
+        self._edgeweighteddirectedcycle()
+
+    def _edgeweighteddirectedcycle(self):
+        self._marked = [None] * self._g.V()
+        self._edgeto = [None] * self._g.V()
+        self._onstack = [None] * self._g.V()
+        for v in range(self._g.V()):
+            if not self._marked[v]:
+                self._dfs(self._g, v)
+
+    def _dfs(self, g, v):
+        self._marked[v] = True
+        self._onstack[v] = True
+        for e in g.adj(v):
+            w = e.To()
+            if self.has_cycle():
+                return
+            elif not self._marked[w]:
+                self._edgeto[w] = e
+                self._dfs(g, w)
+            elif self._onstack[w]:
+                self._cycle = Stack()
+                f = e
+                while f.From() != w:
+                    self._cycle.push(f)
+                    f = self._edgeto[f.From()]
+                self._cycle.push(f)
+                return
+        self._onstack[v] = False
+
+    def has_cycle(self):
+        return self._cycle is not None
+
+    def cycle(self):
+        return self._cycle
+
+
+class BellmanFordSP:
+    def __init__(self, G, s):
+        self._g = G
+        self._s = s
+        self._cost = 0
+        self._cycle = None
+        self._bellmanfordsp()
+
+    def _bellmanfordsp(self):
+        # This algorithm relaxes each edge so it doesn't need PQ,
+        # and that is also the reason why we don't change dist in PQ.
+        self._q = Queue()
+        self._onq = [False] * self._g.V()
+        self._edgeto = [None] * self._g.V()
+        self._distto = [None] * self._g.V()
+
+        for i in range(len(self._distto)):
+            self._distto[i] = float('inf')
+
+        while not self._q.is_empty() and not self.has_negative_cycle():
+            v = self._q.dequeue()
+            self._onq[v] = False
+            self._relax(self._g, v)
+
+    def _relax(self, g, v):
+        for e in g.adj(v):
+            w = e.To()
+            if self._distto[w] > self._distto[v] + e.weight():
+                self._distto[w] = self._distto[v] + e.weight()
+                if not self._onq[w]:
+                    self._q.enqueue(w)
+                    self._onq[w] = True
+        self._cost += 1
+        if self._cost % g.V() == 0:
+            self.find_negative_cycle()
+            if self.has_negative_cycle():
+                return
+
+    def has_negative_cycle(self):
+        return self._cycle is not None
+
+    def find_negative_cycle(self):
+        ewd = EdgeWeightedDigraph(self._g.V())
+        for v in range(self._g.V()):
+            e = self._edgeto[v]
+            if e is not None:
+                ewd.add_edge(e)
+        finder = EdgeWeightedDirectedCycle(ewd)
+        self._cycle = finder.has_cycle()

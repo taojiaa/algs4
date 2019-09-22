@@ -27,3 +27,5 @@ class TestAcyclicSP:
         sp = AcyclicSP(g, 0)
         assert sp.distTo(4) == 0.38
         assert sp.distTo(1) == 1.05
+
+
