@@ -1,62 +1,8 @@
 from src.fundamental.Stack import Stack
 from src.fundamental.Queue import Queue
-from src.fundamental.Bag import Bag
 
 from .Graph import DepthFirstSearch, CC
-from .utils import words_gen
-
-
-class Digraph:
-    def __init__(self, _input):
-        if isinstance(_input, int):
-            self._v = _input
-            self._e = 0
-            self._adj = [Bag() for i in range(self._v)]
-            self._indegree = [0] * self._v
-        else:
-            if isinstance(_input, str) and '.txt' in _input:
-                self._read(_input)
-
-    def _read(self, text):
-        with open(text, 'r') as file:
-            words = words_gen(file)
-            self._v = int(next(words))
-            self._e = 0
-            self._adj = [Bag() for i in range(self._v)]
-            self._indegree = [0] * self._v
-
-            num_e = int(next(words))
-            for _ in range(num_e):
-                v = int(next(words))
-                w = int(next(words))
-                self.add_edge(v, w)
-
-    def add_edge(self, v, w):
-        self._adj[v].add(w)
-        self._indegree[w] += 1
-        self._e += 1
-
-    def reverse(self):
-        r = Digraph(self._v)
-        for i in range(self._v):
-            for w in self.adj(i):
-                r.add_edge(w, i)
-        return r
-
-    def indegree(self, v):
-        return self._indegree[v]
-
-    def outdegree(self, v):
-        return self._adj[v].size()
-
-    def V(self):
-        return self._v
-
-    def E(self):
-        return self._e
-
-    def adj(self, v):
-        return self._adj[v]
+from .base import Digraph, EdgeWeightedDigraph
 
 
 class DirectedDFS(DepthFirstSearch):
@@ -109,26 +55,86 @@ class DirectedCycle:
         return self._cycle
 
 
-class DepthFirstOrder:
+class EdgeWeightedDirectedCycle:
     def __init__(self, G):
         self._g = G
-        self._pre = Queue()
-        self._post = Queue()
-        self._reverse_post = Stack()
-        self._depthfirstorder()
+        self._cycle = None
+        self._edgeweighteddirectedcycle()
 
-    def _depthfirstorder(self):
+    def _edgeweighteddirectedcycle(self):
         self._marked = [None] * self._g.V()
+        self._edgeto = [None] * self._g.V()
+        self._onstack = [None] * self._g.V()
         for v in range(self._g.V()):
             if not self._marked[v]:
                 self._dfs(self._g, v)
 
     def _dfs(self, g, v):
         self._marked[v] = True
+        self._onstack[v] = True
+        for e in g.adj(v):
+            w = e.To()
+            if self.has_cycle():
+                return
+            elif not self._marked[w]:
+                self._edgeto[w] = e
+                self._dfs(g, w)
+            elif self._onstack[w]:
+                self._cycle = Stack()
+                f = e
+                while f.From() != w:
+                    self._cycle.push(f)
+                    f = self._edgeto[f.From()]
+                self._cycle.push(f)
+                return
+        self._onstack[v] = False
+
+    def has_cycle(self):
+        return self._cycle is not None
+
+    def cycle(self):
+        return self._cycle
+
+
+class DepthFirstOrder:
+    def __init__(self, G):
+        self._g = G
+        self._pre = Queue()
+        self._post = Queue()
+        self._reverse_post = Stack()
+        if type(G) == Digraph:
+            self._depthfirstorder_d()
+        elif type(G) == EdgeWeightedDigraph:
+            self._depthfirstorder_ewd()
+
+    def _depthfirstorder_d(self):
+        self._marked = [None] * self._g.V()
+        for v in range(self._g.V()):
+            if not self._marked[v]:
+                self._dfs_d(self._g, v)
+
+    def _dfs_d(self, g, v):
+        self._marked[v] = True
         self._pre.enqueue(v)
         for w in g.adj(v):
             if not self._marked[w]:
-                self._dfs(g, w)
+                self._dfs_d(g, w)
+        self._post.enqueue(v)
+        self._reverse_post.push(v)
+
+    def _depthfirstorder_ewd(self):
+        self._marked = [None] * self._g.V()
+        for v in range(self._g.V()):
+            if not self._marked[v]:
+                self._dfs_ewd(self._g, v)
+
+    def _dfs_ewd(self, g, v):
+        self._marked[v] = True
+        self._pre.enqueue(v)
+        for e in g.adj(v):
+            w = e.To()
+            if not self._marked[w]:
+                self._dfs_ewd(g, w)
         self._post.enqueue(v)
         self._reverse_post.push(v)
 
@@ -146,10 +152,19 @@ class Topological:
     def __init__(self, G):
         self._g = G
         self._order = None
-        self._topological()
+        if type(G) == Digraph:
+            self._topological_d()
+        elif type(G) == EdgeWeightedDigraph:
+            self._topological_ewd()
 
-    def _topological(self):
+    def _topological_d(self):
         c_finder = DirectedCycle(self._g)
+        if not c_finder.has_cycle():
+            dfs = DepthFirstOrder(self._g)
+            self._order = dfs.reverse_post()
+
+    def _topological_ewd(self):
+        c_finder = EdgeWeightedDirectedCycle(self._g)
         if not c_finder.has_cycle():
             dfs = DepthFirstOrder(self._g)
             self._order = dfs.reverse_post()

@@ -1,5 +1,6 @@
-from src.graph.Digraph import (DepthFirstOrder, Digraph, DirectedCycle,
+from src.graph.Digraph import (DepthFirstOrder, DirectedCycle,
                                DirectedDFS, KosarajuSCC, Topological)
+from src.graph.base import Digraph
 from .utils import construct_graph
 
 

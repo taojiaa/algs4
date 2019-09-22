@@ -1,5 +1,6 @@
+from src.graph.base import Graph
 from src.graph.Graph import (CC, BreadthFirstPaths, DepthFirstPaths,
-                             DepthFirstSearch, Graph)
+                             DepthFirstSearch)
 
 from .utils import construct_graph
 

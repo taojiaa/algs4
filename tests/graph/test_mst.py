@@ -1,4 +1,5 @@
-from src.graph.MST import Edge, EdgeWeightedGraph, LazyPrimMST, PrimMST
+from src.graph.MST import LazyPrimMST, PrimMST
+from src.graph.base import Edge, EdgeWeightedGraph
 
 from .utils import construct_graph
 

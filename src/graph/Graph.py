@@ -1,64 +1,8 @@
-from src.fundamental.Bag import Bag
 from src.fundamental.Queue import Queue
 from src.fundamental.Stack import Stack
 
-from .base import Paths, Search
-from .utils import words_gen
 
-
-class Graph:
-    # Only allows int val to identify vertex
-    def __init__(self, _input):
-        if isinstance(_input, int):
-            self._v = _input
-            self._e = 0
-            self._adj = [Bag() for i in range(self._v)]
-        else:
-            if isinstance(_input, str) and '.txt' in _input:
-                self._read(_input)
-
-    def _read(self, text):
-        with open(text, 'r') as file:
-            words = words_gen(file)
-            self._v = int(next(words))
-            self._e = 0
-            self._adj = [Bag() for i in range(self._v)]
-
-            num_e = int(next(words))
-            for _ in range(num_e):
-                v = int(next(words))
-                w = int(next(words))
-                self.add_edge(v, w)
-
-    def V(self):
-        return self._v
-
-    def E(self):
-        return self._e
-
-    def add_edge(self, v, w):
-        self._adj[v].add(w)
-        self._adj[w].add(v)
-        self._e += 1
-
-    def adj(self, v):
-        return self._adj[v]
-
-    def degree(self, v):
-        return self._adj[v].size()
-
-    def to_string(self):
-        s = ''
-        s = s + (self._v + " vertices, " + self._e + " edges " + '\n')
-        for i in range(self._v):
-            s = s + (i + ": ")
-            for w in self._adj[i]:
-                s = s + (w + " ")
-            s = s + '\n'
-        return s
-
-
-class DepthFirstSearch(Search):
+class DepthFirstSearch:
     def __init__(self, G, s):
         self._g = G
         self._s = s
@@ -83,7 +27,7 @@ class DepthFirstSearch(Search):
         return self._count
 
 
-class DepthFirstPaths(Paths):
+class DepthFirstPaths:
     def __init__(self, G, s):
         self._g = G
         self._s = s
@@ -115,7 +59,7 @@ class DepthFirstPaths(Paths):
         return path
 
 
-class BreadthFirstPaths(Paths):
+class BreadthFirstPaths:
     def __init__(self, G, s):
         self._g = G
         self._s = s

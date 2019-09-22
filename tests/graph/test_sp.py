@@ -1,5 +1,6 @@
-from src.graph.SP import (AcyclicSP, DijkstraSP, DirectedEdge,
-                          EdgeWeightedDigraph)
+from src.graph.SP import AcyclicSP, DijkstraSP
+from src.graph.Digraph import EdgeWeightedDigraph
+from src.graph.base import DirectedEdge
 
 from .utils import construct_graph
 
@@ -23,9 +24,8 @@ class TestDijkstraSP:
 
 class TestAcyclicSP:
     def test_distto(self):
-        g = construct_graph('files/tinyEWD.txt', EdgeWeightedDigraph)
-        sp = AcyclicSP(g, 0)
-        assert sp.distTo(4) == 0.38
-        assert sp.distTo(1) == 1.05
-
+        g = construct_graph('files/tinyEWDAG.txt', EdgeWeightedDigraph)
+        sp = AcyclicSP(g, 5)
+        assert sp.distTo(0) == 0.73
+        assert sp.distTo(4) == 0.35
 
