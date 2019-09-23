@@ -1,3 +1,6 @@
+from random import shuffle
+
+
 class LSD:
     def __init__(self):
         self._R = 256
@@ -73,9 +76,9 @@ class MSD:
     # insertion sort a[lo..hi], starting at dth character
     def _less(self, s1, s2, d):
         for i in range(d, min(len(s1), len(s2))):
-            if s1[d] < s2[d]:
+            if s1[i] < s2[i]:
                 return True
-            if s1[d] > s2[d]:
+            if s1[i] > s2[i]:
                 return False
         return len(s1) < len(s2)
 
@@ -86,6 +89,43 @@ class MSD:
         return True
 
 
-        
+class Quick3String:
+    def __init__(self):
+        pass
 
+    def _charAt(self, s, d):
+        return ord(s[d]) if d < len(s) else -1
 
+    def sort(self, a):
+        shuffle(a)
+        self._sort(a, 0, len(a) - 1, 0)
+        return a
+
+    def _sort(self, a, lo, hi, d):
+        if lo >= hi:
+            return
+        p = lo
+        p_1, p_2 = lo + 1, hi
+        while p_1 <= p_2:
+            t = self._charAt(a[p_1], d)
+            v = self._charAt(a[p], d)
+            if t < v:
+                a[p_1], a[p] = a[p], a[p_1]
+                p = p + 1
+                p_1 = p_1 + 1
+            elif t > v:
+                a[p_1], a[p_2] = a[p_2], a[p_1]
+                p_2 = p_2 - 1
+            else:
+                p_1 = p_1 + 1
+
+        self._sort(a, lo, p - 1, d)
+        if v >= 0:
+            self._sort(a, p, p_2, d + 1)
+        self._sort(a, p_2 + 1, hi, d)
+
+    def is_sorted(self, a):
+        for i in range(len(a) - 1):
+            if a[i] > a[i + 1]:
+                return False
+        return True
