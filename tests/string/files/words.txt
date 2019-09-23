@@ -1,0 +1,8 @@
+all
+bad
+bed
+bug
+dad
+yes
+yet
+zoo

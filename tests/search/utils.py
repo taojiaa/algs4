@@ -2,14 +2,14 @@ import string
 from random import shuffle
 
 
-def file_reader(file_name='./test/test.txt'):
+def read_string_array(file_path):
     words = []
-    with open(file_name, 'r') as file:
+    with open(file_path, 'r') as file:
         for line in file:
             for word in line.split():
                 word = word.strip(string.punctuation).lower()
                 words.append(word)
-    return word
+    return words
 
 
 def frequency_counter(st, words, min_len=0):
