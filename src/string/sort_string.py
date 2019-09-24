@@ -84,8 +84,3 @@ class MSD:
             if a[i] > a[i + 1]:
                 return False
         return True
-
-
-        
-
-
