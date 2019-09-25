@@ -2,12 +2,12 @@ from src.graph.SP import AcyclicSP, DijkstraSP, CPM, BellmanFordSP
 from src.graph.base import EdgeWeightedDigraph
 from src.graph.base import DirectedEdge
 
-from .utils import construct_graph, generate_path
+from .utils import generate_path
 
 
 class TestEdgeWeightedDigraph:
     def test_init(self):
-        g = construct_graph(10, EdgeWeightedDigraph)
+        g = EdgeWeightedDigraph(10)
         e = DirectedEdge(1, 2, 0.5)
         g.add_edge(e)
         assert g.V() == 10
@@ -16,7 +16,9 @@ class TestEdgeWeightedDigraph:
 
 class TestDijkstraSP:
     def test_distto(self):
-        g = construct_graph('files/tinyEWD.txt', EdgeWeightedDigraph)
+        file_path = generate_path('files/tinyEWD.txt')
+        with open(file_path, 'r') as f:
+            g = EdgeWeightedDigraph.from_file(f)
         sp = DijkstraSP(g, 0)
         assert sp.distTo(4) == 0.38
         assert sp.distTo(1) == 1.05
@@ -24,7 +26,9 @@ class TestDijkstraSP:
 
 class TestAcyclicSP:
     def test_distto(self):
-        g = construct_graph('files/tinyEWDAG.txt', EdgeWeightedDigraph)
+        file_path = generate_path('files/tinyEWDAG.txt')
+        with open(file_path, 'r') as f:
+            g = EdgeWeightedDigraph.from_file(f)
         sp = AcyclicSP(g, 5)
         assert sp.distTo(0) == 0.73
         assert sp.distTo(4) == 0.35
@@ -45,6 +49,8 @@ class TestCPM:
 
 class TestBellmanFordSP:
     def test_distto(self):
-        g = construct_graph('files/tinyEWDAG.txt', EdgeWeightedDigraph)
+        file_path = generate_path('files/tinyEWDAG.txt')
+        with open(file_path, 'r') as f:
+            g = EdgeWeightedDigraph.from_file(f)
         bsp = BellmanFordSP(g, 0)
         assert bsp.distTo(2) == 0.26

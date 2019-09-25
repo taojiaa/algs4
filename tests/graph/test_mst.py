@@ -1,12 +1,12 @@
 from src.graph.MST import LazyPrimMST, PrimMST
 from src.graph.base import Edge, EdgeWeightedGraph
 
-from .utils import construct_graph
+from .utils import generate_path
 
 
 class TestEdgeWeightedGraph:
     def test_init(self):
-        g = construct_graph(10, EdgeWeightedGraph)
+        g = EdgeWeightedGraph(10)
         e = Edge(1, 2, 0.5)
         g.add_edge(e)
         assert g.V() == 10
@@ -15,13 +15,17 @@ class TestEdgeWeightedGraph:
 
 class TestLazyPrimMST:
     def test_weight(self):
-        g = construct_graph('files/tinyEWG.txt', EdgeWeightedGraph)
+        file_path = generate_path('files/tinyEWG.txt')
+        with open(file_path, 'r') as f:
+            g = EdgeWeightedGraph.from_file(f)
         mst = LazyPrimMST(g)
         assert round(mst.weight(), 2) == 1.81
 
 
 class TestPrimMST:
     def test_weight(self):
-        g = construct_graph('files/tinyEWG.txt', EdgeWeightedGraph)
+        file_path = generate_path('files/tinyEWG.txt')
+        with open(file_path, 'r') as f:
+            g = EdgeWeightedGraph.from_file(f)
         mst = PrimMST(g)
         assert round(mst.weight(), 2) == 1.81

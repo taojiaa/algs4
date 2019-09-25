@@ -1,31 +1,21 @@
 from src.fundamental.Bag import Bag
 
-from .utils import words_gen
-
 
 class Graph:
-    # Only allows int val to identify vertex
-    def __init__(self, _input):
-        if isinstance(_input, int):
-            self._v = _input
-            self._e = 0
-            self._adj = [Bag() for i in range(self._v)]
-        else:
-            if isinstance(_input, str) and '.txt' in _input:
-                self._read(_input)
+    def __init__(self, v: int):
+        self._v = v
+        self._e = 0
+        self._adj = [Bag() for i in range(self._v)]
 
-    def _read(self, text):
-        with open(text, 'r') as file:
-            words = words_gen(file)
-            self._v = int(next(words))
-            self._e = 0
-            self._adj = [Bag() for i in range(self._v)]
-
-            num_e = int(next(words))
-            for _ in range(num_e):
-                v = int(next(words))
-                w = int(next(words))
-                self.add_edge(v, w)
+    @classmethod
+    def from_file(cls, f):
+        v = int(f.readline().strip())
+        e = int(f.readline().strip())
+        graph = cls(v)
+        for i in range(e):
+            v, w = f.readline().rstrip('\n').split()
+            graph.add_edge(int(v), int(w))
+        return graph
 
     def V(self):
         return self._v
@@ -56,29 +46,21 @@ class Graph:
 
 
 class Digraph:
-    def __init__(self, _input):
-        if isinstance(_input, int):
-            self._v = _input
-            self._e = 0
-            self._adj = [Bag() for i in range(self._v)]
-            self._indegree = [0] * self._v
-        else:
-            if isinstance(_input, str) and '.txt' in _input:
-                self._read(_input)
+    def __init__(self, v: int):
+        self._v = v
+        self._e = 0
+        self._adj = [Bag() for i in range(self._v)]
+        self._indegree = [0] * self._v
 
-    def _read(self, text):
-        with open(text, 'r') as file:
-            words = words_gen(file)
-            self._v = int(next(words))
-            self._e = 0
-            self._adj = [Bag() for i in range(self._v)]
-            self._indegree = [0] * self._v
-
-            num_e = int(next(words))
-            for _ in range(num_e):
-                v = int(next(words))
-                w = int(next(words))
-                self.add_edge(v, w)
+    @classmethod
+    def from_file(cls, f):
+        v = int(f.readline().strip())
+        e = int(f.readline().strip())
+        graph = cls(v)
+        for i in range(e):
+            v, w = f.readline().rstrip('\n').split()
+            graph.add_edge(int(v), int(w))
+        return graph
 
     def add_edge(self, v, w):
         self._adj[v].add(w)
@@ -181,20 +163,15 @@ class EdgeWeightedGraph(Graph):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def _read(self, text):
-        with open(text, 'r') as file:
-            words = words_gen(file)
-            self._v = int(next(words))
-            self._e = 0
-            self._adj = [Bag() for i in range(self._v)]
-
-            num_e = int(next(words))
-            for _ in range(num_e):
-                v1 = int(next(words))
-                v2 = int(next(words))
-                tw = float(next(words))
-                e = Edge(v1, v2, tw)
-                self.add_edge(e)
+    @classmethod
+    def from_file(cls, f):
+        v = int(f.readline().strip())
+        e = int(f.readline().strip())
+        graph = cls(v)
+        for i in range(e):
+            v, w, ew = f.readline().rstrip('\n').split()
+            graph.add_edge(Edge(int(v), int(w), float(ew)))
+        return graph
 
     def V(self, *args, **kwargs):
         return super().V(*args, **kwargs)
@@ -232,21 +209,15 @@ class EdgeWeightedDigraph(Digraph):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def _read(self, text):
-        with open(text, 'r') as file:
-            words = words_gen(file)
-            self._v = int(next(words))
-            self._e = 0
-            self._adj = [Bag() for i in range(self._v)]
-            self._indegree = [0] * self._v
-
-            num_e = int(next(words))
-            for _ in range(num_e):
-                v1 = int(next(words))
-                v2 = int(next(words))
-                tw = float(next(words))
-                e = DirectedEdge(v1, v2, tw)
-                self.add_edge(e)
+    @classmethod
+    def from_file(cls, f):
+        v = int(f.readline().strip())
+        e = int(f.readline().strip())
+        graph = cls(v)
+        for i in range(e):
+            v, w, ew = f.readline().rstrip('\n').split()
+            graph.add_edge(DirectedEdge(int(v), int(w), float(ew)))
+        return graph
 
     def add_edge(self, e):
         w = e.From()
