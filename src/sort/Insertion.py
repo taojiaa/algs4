@@ -3,7 +3,6 @@ from .Base import Sort
 
 # Note that the numbers of comparison and exchange are totolly different
 # between Selection and Insertion.
-
 class Insertion(Sort):
 
     def __init__(self):
