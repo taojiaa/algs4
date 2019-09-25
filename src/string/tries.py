@@ -18,6 +18,10 @@ class TriesST(StringST):
         return ord(c)
 
     def get(self, key):
+        if key is None:
+            raise ValueError('The key must not be null.')
+        if len(key) == 0:
+            raise ValueError('The key must have length >= 1.')
         node = self._get(self._root, key, 0)
         if node is None:
             return None
@@ -32,6 +36,10 @@ class TriesST(StringST):
         return self._get(node.next[c], key, d + 1)
 
     def put(self, key, val):
+        if key is None:
+            raise ValueError('The key must not be null.')
+        if len(key) == 0:
+            raise ValueError('The key must have length >= 1.')
         self._root = self._put(self._root, key, val, 0)
 
     def _put(self, node, key, val, d):
@@ -128,3 +136,139 @@ class TriesST(StringST):
         for i in range(TriesST.R):
             if pat[d] == '.' or nc == i:
                 self._collect_match(node.next[i], pre + chr(i), pat, q)
+
+
+class TST(StringST):
+    class Node:
+        def __init__(self):
+            # explicitly store the char, unlike the TriesST.
+            self.c = None
+            self.val = None
+            self.left = None
+            self.mid = None
+            self.right = None
+
+    def __init__(self):
+        self._root = None
+        self._size = 0
+
+    def get(self, key):
+        if key is None:
+            raise ValueError('The key must not be null.')
+        if len(key) == 0:
+            raise ValueError('The key must have length >= 1.')
+        node = self._get(self._root, key, 0)
+        if node is None:
+            return None
+        return node.val
+
+    def _get(self, node, key, d):
+        if node is None:
+            return None
+        c = key[d]
+        # Note that the path of this kind of recursion is like con1 -> con2 -> con1,
+        # and then return directly without getting into other conditions.
+        if c < node.c:
+            return self._get(node.left, key, d)
+        if c > node.c:
+            return self._get(node.right, key, d)
+        if d < len(key) - 1:
+            return self._get(node.mid, key, d + 1)
+        return node
+
+    def put(self, key, val):
+        if key is None:
+            raise ValueError('The key must not be null.')
+        if len(key) == 0:
+            raise ValueError('The key must have length >= 1.')
+        if not self.contains(key):
+            self._size += 1
+        else:
+            if val is None:
+                self._size -= 1
+        self._root = self._put(self._root, key, val, 0)
+
+    def _put(self, node, key, val, d):
+        c = key[d]
+        if node is None:
+            node = TST.Node()
+            node.c = c
+        if c < node.c:
+            node.left = self._put(node.left, key, val, d)
+        elif c > node.c:
+            node.right = self._put(node.right, key, val, d)
+        elif d < len(key) - 1:
+            node.mid = self._put(node.mid, key, val, d + 1)
+        else:
+            node.val = val
+        return node
+
+    def delete(self, key):
+        # delete the node is very difficult?
+        self._root = self.put(key, None)
+
+    def contains(self, key):
+        return self.get(key) is not None
+        
+    def size(self):
+        return self._size
+
+    def is_empty(self):
+        return self._size == 0
+
+    def keys(self, s):
+        return self.keys_with_prefix('')
+
+    def keys_with_prefix(self, pre):
+        q = Queue()
+        node = self._get(self._root, pre, 0)
+        if node.val is not None:
+            q.enqueue(pre)
+        self._collect(node.mid, pre, q)
+        return q
+
+    def _collect(self, node, pre, q):
+        if node is None:
+            return
+        if node.val is not None:
+            q.enqueue(pre + node.c)
+        self._collect(node.left, pre, q)
+        self._collect(node.mid, pre + node.c, q)
+        self._collect(node.right, pre, q)
+
+    def keys_that_match(self, pat):
+        q = Queue()
+        self._collect_match(self._root, '', pat, q)
+        return q
+
+    def _collect_match(self, node, pre, pat, q):
+        if node is None:
+            return
+        d = len(pre)
+        c = pat[d]
+        if c == '.' or c < node.c:
+            self._collect_match(node.left, pre, pat, q)
+        if c == '.' or c == node.c:
+            if (d == len(pat) - 1) and (node.val is not None):
+                q.enqueue(pre + node.c)
+            if d < len(pat) - 1:
+                self._collect_match(node.mid, pre + node.c, pat, q)
+        if c == '.' or c > node.c:
+            self._collect_match(node.right, pre, pat, q)
+
+    def longest_prefix_of(self, pre):
+        length = 0
+        d = 0
+        node = self._root
+        while (node is not None) and (d < len(pre)):
+            c = pre[d]
+            if c < node.c:
+                node = node.left
+            elif c > node.c:
+                node = node.right
+            else:
+                d = d + 1
+                if node.val is not None:
+                    length = d
+                node = node.mid
+        return pre[:length]
