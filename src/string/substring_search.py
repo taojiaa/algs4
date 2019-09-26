@@ -14,7 +14,7 @@ class Brute:
 
     def search_2(self, pat: str, text: str) -> int:
         m, n = len(pat), len(text)
-        i, j = 0, 0
+        i = j = 0
         while i < n and j < m:
             if text[i] == pat[j]:
                 j += 1
