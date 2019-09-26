@@ -1,6 +1,6 @@
-from src.string.tries import TriesST, TST
+from src.string.tries import TST, TriesST
 
-from .utils import read_string_array, frequency_counter
+from .utils import frequency_counter, read_string_array
 
 
 class TestTriesST:

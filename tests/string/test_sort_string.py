@@ -26,4 +26,3 @@ class TestQuick3String:
         q = Quick3String()
         sa = q.sort(a)
         assert q.is_sorted(sa)
-
