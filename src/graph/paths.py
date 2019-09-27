@@ -6,12 +6,17 @@ class DepthFirstSearch:
     def __init__(self, G, s):
         self._g = G
         self._s = s
-        self.dfs()
+        self._depthfirstsearch()
 
-    def dfs(self):
+    def _depthfirstsearch(self):
         self._marked = [False] * self._g.V()
         self._count = 0
-        self._dfs(self._g, self._s)
+        if isinstance(self._s, int):
+            self._dfs(self._g, self._s)
+        else:
+            for source in self._s:
+                if not self._marked[source]:
+                    self._dfs(self._g, source)
 
     def _dfs(self, g, v):
         self._marked[v] = True
