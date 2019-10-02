@@ -81,6 +81,7 @@ class BreadthFirstPaths:
         self._marked = [None] * self._g.V()
         self._edgeto = [None] * self._g.V()
         self._queue.enqueue(self._s)
+        self._marked[self._s] = True
         while not self._queue.is_empty():
             v = self._queue.dequeue()
             for w in self._g.adj(v):
